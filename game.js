@@ -20,6 +20,7 @@ const ENEMY_SPEED = 20
 
 let isJumping = true
 
+loadSprite('background', '/assets/images/background.png')
 loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
@@ -45,6 +46,14 @@ loadSprite('blue-surprise', 'RMqCc1G.png')
 scene("game", ({ level, score }) => {
   layers(['bg', 'obj', 'ui'], 'obj')
 
+  // Add the background
+  add([
+    sprite('background'),
+    layer('bg'),
+    pos(0, 0),
+    scale(1.9 , .495) // Scale the background to fit the screen
+  ])
+
   const maps = [
     [
       '                                      ',
@@ -58,6 +67,18 @@ scene("game", ({ level, score }) => {
       '                    ^   ^   ()        ',
       '==============================   =====',
     ],
+    [
+        '                                                                                 ',
+        '                                                                                 ',
+        '                                                                                 ',
+        '                                                                                 ',
+        '                                                                                 ',
+        '     %   =*=%=                                                                   ',
+        '                                                                                 ',
+        '                            -+                                                   ',
+        '           ^         ^   ^  ()   ^                         ^    ^                ',
+        '=================  ==========================  ======  ==================   =====',
+      ],
     [
       '£                                       £',
       '£                                       £',
