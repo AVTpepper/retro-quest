@@ -25,6 +25,12 @@ let isInvincible = false
 loadSprite('background', '/assets/images/background.png')
 loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
+loadSprite('background1', '/assets/images/background.png')
+loadSprite('background2', '/assets/images/background2.png')
+loadSprite('background3', '/assets/images/background3.png')
+loadSprite('turtle', 'assets/images/turtle.png')
+
+
 loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
@@ -47,29 +53,40 @@ loadSprite('blue-surprise', 'RMqCc1G.png')
 
 
 
-scene("game", ({
-    level,
-    score
-}) => {
+scene("game", ({ level, score }) => {
     layers(['bg', 'obj', 'ui'], 'obj')
 
+    let backgroundSprite;
+    switch (level) {
+        case 0:
+            backgroundSprite = 'background1';
+            break;
+        case 1:
+            backgroundSprite = 'background2';
+            break;
+        case 2:
+            backgroundSprite = 'background3';
+            break;
+        default:
+            backgroundSprite = 'background1';
+    }
     // Add the background
     add([
-        sprite('background'),
+
+        sprite(backgroundSprite),
         layer('bg'),
         pos(0, 0),
-        scale(4.9, .495) // Scale the background to fit the screen
+        scale(1.9, .495) // Scale the background to fit the screen
     ])
 
     const maps = [
-
         [
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
-            '    %   <=*=%=                        %=*=%=                                                        % ',
+            '    %   ==*=%=                        %=*=%=                                                        % ',
             '                                                                                                     ',
             '                            -+                                     -+                         -+     ',
             '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
@@ -88,6 +105,7 @@ scene("game", ({
             '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
         ],
         /* level by q 
+        /* level by q
     problems: evil shrooms don't fall; evil shrooms should move back and forth
     requires: mushroom to also increase jump force
     requires: finish line to go to next lvl*/
@@ -100,8 +118,8 @@ scene("game", ({
             '               =======                                   %%%%%         ^                                            ',
             '                                                                 =======                           ^                ',
             '          ====          =%%%%%=                                =========        *         ==========                ',
-            '                                            ^                ===========                               $$        -+ ',
-            '=========         ^             ^        ======            =============                             ======      () ',
+            '                                            ^                ===========                               $$           ',
+            '=========         ^             ^        ======            =============                             ======         ',
             '           ========  ====================      ======  ==================   =====                            =======',
         ],
         // level design by james
@@ -317,15 +335,22 @@ scene("game", ({
         }
     })
 
+    player.action(() => {
+        if (player.grounded()) {
+            isJumping = false
+        }
+    })
+
+    keyPress('space', () => {
+        if (player.grounded()) {
+            isJumping = true
+            player.jump(CURRENT_JUMP_FORCE)
+        }
+    })
 })
 
-scene('lose', ({
-    score
-}) => {
+scene('lose', ({ score }) => {
     add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
 })
 
-start("game", {
-    level: 0,
-    score: 0
-})
+start("game", { level: 0, score: 0 })
