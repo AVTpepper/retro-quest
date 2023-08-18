@@ -24,7 +24,7 @@ scene('game', () => {
             '-': () => [
                 sprite('brick'),
                 area(),
-                body({ isStatic: true }),
+                body({ isStatic: true })
             ]
         }
     };

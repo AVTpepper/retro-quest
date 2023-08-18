@@ -13,13 +13,18 @@ const MOVE_SPEED = 120
 const JUMP_FORCE = 360
 const BIG_JUMP_FORCE = 550
 let CURRENT_JUMP_FORCE = JUMP_FORCE
+let CURRENT_MOVE_SPEED = MOVE_SPEED
 const FALL_DEATH = 400
 const ENEMY_SPEED = 20
 
 // Game logic
 
 let isJumping = true
+let isInvincible = false
 
+loadSprite('background', '/assets/images/background.png')
+loadSprite('turtle', 'assets/images/turtle.png') // add turtle
+loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
 loadSprite('background1', '/assets/images/background.png')
 loadSprite('background2', '/assets/images/background2.png')
 loadSprite('background3', '/assets/images/background3.png')
@@ -99,6 +104,7 @@ scene("game", ({ level, score }) => {
             '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
             '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
         ],
+        /* level by q 
         /* level by q
     problems: evil shrooms don't fall; evil shrooms should move back and forth
     requires: mushroom to also increase jump force
@@ -133,27 +139,29 @@ scene("game", ({ level, score }) => {
         ],
     ]
 
-  const levelCfg = {
-    width: 20,
-    height: 20,
-    '=': [sprite('block'), solid()],
-    '$': [sprite('coin'), 'coin'],
-    '%': [sprite('surprise'), solid(), 'coin-surprise'],
-    '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
-    '}': [sprite('unboxed'), solid()],
-    '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
-    ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
-    '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
-    '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
-    '^': [sprite('evil-shroom'), solid(), 'dangerous'],
-    '#': [sprite('mushroom'), solid(), 'mushroom', body()],
-    '!': [sprite('blue-block'), solid(), scale(0.5)],
-    '£': [sprite('blue-brick'), solid(), scale(0.5)],
-    'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
-    '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
-    'x': [sprite('blue-steel'), solid(), scale(0.5)],
-    '&': [sprite('turtle'), solid(), 'dangerous'],
-  }
+    const levelCfg = {
+        width: 20,
+        height: 20,
+        '=': [sprite('block'), solid()],
+        '$': [sprite('coin'), 'coin'],
+        '%': [sprite('surprise'), solid(), 'coin-surprise'],
+        '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
+        '<': [sprite('surprise'), solid(), 'star-surprise'],
+        '}': [sprite('unboxed'), solid()],
+        '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
+        ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
+        '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
+        '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
+        '^': [sprite('evil-shroom'), solid(), 'dangerous'],
+        '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+        '!': [sprite('blue-block'), solid(), scale(0.5)],
+        '£': [sprite('blue-brick'), solid(), scale(0.5)],
+        'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
+        '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
+        'x': [sprite('blue-steel'), solid(), scale(0.5)],
+        '&': [sprite('turtle'), 'turtle', 'dangerous'],
+        '>': [sprite('star'), 'star'],
+    }
 
     const gameLevel = addLevel(maps[level], levelCfg)
 
@@ -168,6 +176,7 @@ scene("game", ({ level, score }) => {
 
     add([text('level ' + parseInt(level + 1)), pos(40, 6)])
 
+    // power-up functions
     function big() {
         let timer = 0
         let isBig = false
@@ -198,12 +207,37 @@ scene("game", ({ level, score }) => {
         }
     }
 
+    function star() {
+        let timer = 0
+        return {
+            update() {
+                if(isInvincible) {
+                    CURRENT_MOVE_SPEED = MOVE_SPEED * 1.1
+                    timer -= dt()
+                    if (timer <= 0) {
+                        this.noStar()
+                    }
+                }    
+            },
+            noStar() {
+                isInvincible = false
+                CURRENT_MOVE_SPEED = MOVE_SPEED
+                timer = 0
+            },
+            starUp(time) {
+                timer = time
+                isInvincible = true
+            },
+        }
+    }
+
     const player = add([
         sprite('mario'), solid(),
         pos(30, 0),
         body(),
         big(),
-        origin('bot')
+        star(),
+        origin('bot'),
     ])
 
     action('mushroom', (m) => {
@@ -221,6 +255,11 @@ scene("game", ({ level, score }) => {
             destroy(obj)
             gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
+        if (obj.is('star-surprise')) {
+            gameLevel.spawn('>', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
     })
 
     player.collides('mushroom', (m) => {
@@ -234,27 +273,21 @@ scene("game", ({ level, score }) => {
         scoreLabel.text = scoreLabel.value
     })
 
+    player.collides('star', (s) => {
+        destroy(s)
+        player.starUp(6)
+    })
+
     action('dangerous', (d) => {
         d.move(-ENEMY_SPEED, 0)
     })
 
-  player.collides('dangerous', (d) => {
-    if (isJumping) {
-      destroy(d)
-    } else {
-      go('lose', { score: scoreLabel.value})
-    }
-  })
-
-  
-  // collides('turtle', 'pipe', () => {
-  
-  // })
-
     player.action(() => {
         camPos(player.pos)
         if (player.pos.y >= FALL_DEATH) {
-            go('lose', { score: scoreLabel.value })
+            go('lose', {
+                score: scoreLabel.value
+            })
         }
     })
 
@@ -267,16 +300,39 @@ scene("game", ({ level, score }) => {
         })
     })
 
+    player.collides('dangerous', (d) => {
+        if (isJumping || isInvincible) {
+            destroy(d)
+        } else {
+            go('lose', {
+                score: scoreLabel.value
+            })
+        }
+    });
+
     action('turtle', (t) => {
         t.move(-ENEMY_SPEED, 0);
     });
 
-    keyDown('left', () => {
-        player.move(-MOVE_SPEED, 0)
+    keyDown('right', () => {
+        player.move(CURRENT_MOVE_SPEED, 0)
     })
 
-    keyDown('right', () => {
-        player.move(MOVE_SPEED, 0)
+    keyDown('left', () => {
+        player.move(-CURRENT_MOVE_SPEED, 0)
+    })
+
+    player.action(() => {
+        if (player.grounded()) {
+            isJumping = false
+        }
+    })
+
+    keyPress('space', () => {
+        if (player.grounded()) {
+            isJumping = true
+            player.jump(CURRENT_JUMP_FORCE)
+        }
     })
 
     player.action(() => {
