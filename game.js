@@ -84,7 +84,7 @@ scene("game", ({
       '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
       '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
     ],
-
+    [
       '                                                                                 ',
       '                                                                                 ',
       '                                                                                 ',
@@ -139,14 +139,14 @@ requires: finish line to go to next lvl*/
     ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
     '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
     '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
-    '^': [sprite('evil-shroom'), solid(), 'dangerous'],
+    '^': [sprite('evil-shroom'), solid(), 'dangerous', patrol(ENEMY_SPEED)],
     '#': [sprite('mushroom'), solid(), 'mushroom', body()],
     '!': [sprite('blue-block'), solid(), scale(0.5)],
     '£': [sprite('blue-brick'), solid(), scale(0.5)],
-    'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
+    'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous', patrol(ENEMY_SPEED)],
     '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
     'x': [sprite('blue-steel'), solid(), scale(0.5)],
-    '&': [sprite('turtle'), 'turtle'],
+    '&': [sprite('turtle'), solid(), 'turtle', patrol(ENEMY_SPEED)],
   }
 
   const gameLevel = addLevel(maps[level], levelCfg)
@@ -188,6 +188,7 @@ requires: finish line to go to next lvl*/
         this.scale = vec2(2)
         timer = time
         isBig = true
+        CURRENT_JUMP_FORCE = BIG_JUMP_FORCE;
       }
     }
   }
@@ -288,4 +289,4 @@ scene('lose', ({
 start("game", {
   level: 0,
   score: 0
-})
+})})
