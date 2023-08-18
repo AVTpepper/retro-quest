@@ -133,28 +133,27 @@ scene("game", ({ level, score }) => {
         ],
     ]
 
-    const levelCfg = {
-        width: 20,
-        height: 20,
-        '=': [sprite('block'), solid()],
-        '$': [sprite('coin'), 'coin'],
-        '%': [sprite('surprise'), solid(), 'coin-surprise'],
-        '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
-        '}': [sprite('unboxed'), solid()],
-        '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
-        ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
-        '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
-        '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
-        '^': [sprite('evil-shroom'), solid(), 'dangerous'],
-        '#': [sprite('mushroom'), solid(), 'mushroom', body()],
-        '!': [sprite('blue-block'), solid(), scale(0.5)],
-        '£': [sprite('blue-brick'), solid(), scale(0.5)],
-        'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
-        '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
-        'x': [sprite('blue-steel'), solid(), scale(0.5)],
-        '&': [sprite('turtle'), 'turtle', 'dangerous']
-
-    }
+  const levelCfg = {
+    width: 20,
+    height: 20,
+    '=': [sprite('block'), solid()],
+    '$': [sprite('coin'), 'coin'],
+    '%': [sprite('surprise'), solid(), 'coin-surprise'],
+    '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
+    '}': [sprite('unboxed'), solid()],
+    '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
+    ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
+    '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
+    '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
+    '^': [sprite('evil-shroom'), solid(), 'dangerous'],
+    '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+    '!': [sprite('blue-block'), solid(), scale(0.5)],
+    '£': [sprite('blue-brick'), solid(), scale(0.5)],
+    'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
+    '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
+    'x': [sprite('blue-steel'), solid(), scale(0.5)],
+    '&': [sprite('turtle'), solid(), 'dangerous'],
+  }
 
     const gameLevel = addLevel(maps[level], levelCfg)
 
@@ -239,13 +238,18 @@ scene("game", ({ level, score }) => {
         d.move(-ENEMY_SPEED, 0)
     })
 
-    player.collides('dangerous', (d) => {
-        if (isJumping) {
-            destroy(d)
-        } else {
-            go('lose', { score: scoreLabel.value })
-        }
-    })
+  player.collides('dangerous', (d) => {
+    if (isJumping) {
+      destroy(d)
+    } else {
+      go('lose', { score: scoreLabel.value})
+    }
+  })
+
+  
+  // collides('turtle', 'pipe', () => {
+  
+  // })
 
     player.action(() => {
         camPos(player.pos)
