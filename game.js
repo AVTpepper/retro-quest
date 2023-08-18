@@ -122,7 +122,7 @@ requires: finish line to go to next lvl*/
     'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
     '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
     'x': [sprite('blue-steel'), solid(), scale(0.5)],
-    '&': [sprite('turtle'), 'turtle'],
+    '&': [sprite('turtle'), solid(), 'dangerous'],
   }
 
   const gameLevel = addLevel(maps[level], levelCfg)
@@ -136,8 +136,8 @@ requires: finish line to go to next lvl*/
     }
   ])
 
-  add([text('level ' + parseInt(level + 1)), pos(40, 6)])
-
+  add([text('level ' + parseInt(level + 1) ), pos(40, 6)])
+  
   function big() {
     let timer = 0
     let isBig = false
@@ -163,7 +163,7 @@ requires: finish line to go to next lvl*/
       biggify(time) {
         this.scale = vec2(2)
         timer = time
-        isBig = true
+        isBig = true     
       }
     }
   }
@@ -184,12 +184,12 @@ requires: finish line to go to next lvl*/
     if (obj.is('coin-surprise')) {
       gameLevel.spawn('$', obj.gridPos.sub(0, 1))
       destroy(obj)
-      gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+      gameLevel.spawn('}', obj.gridPos.sub(0,0))
     }
     if (obj.is('mushroom-surprise')) {
       gameLevel.spawn('#', obj.gridPos.sub(0, 1))
       destroy(obj)
-      gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+      gameLevel.spawn('}', obj.gridPos.sub(0,0))
     }
   })
 
@@ -212,18 +212,19 @@ requires: finish line to go to next lvl*/
     if (isJumping) {
       destroy(d)
     } else {
-      go('lose', {
-        score: scoreLabel.value
-      })
+      go('lose', { score: scoreLabel.value})
     }
   })
+
+  
+  // collides('turtle', 'pipe', () => {
+  
+  // })
 
   player.action(() => {
     camPos(player.pos)
     if (player.pos.y >= FALL_DEATH) {
-      go('lose', {
-        score: scoreLabel.value
-      })
+      go('lose', { score: scoreLabel.value})
     }
   })
 
@@ -235,28 +236,19 @@ requires: finish line to go to next lvl*/
       })
     })
   })
-  // add turtle
-  player.collides('turtle', (t) => {
-    if (player.grounded()) {
-      destroy(t);
-      go('lose', {
-        score: scoreLabel.value
-      });
-    } else {
-      destroy(t);
-    }
-  });
 
-  action('turtle', (t) => {
-    t.move(-ENEMY_SPEED, 0);
-  });
+  keyDown('left', () => {
+    player.move(-MOVE_SPEED, 0)
+  })
 
   keyDown('right', () => {
     player.move(MOVE_SPEED, 0)
   })
 
-  keyDown('left', () => {
-    player.move(-MOVE_SPEED, 0)
+  player.action(() => {
+    if(player.grounded()) {
+      isJumping = false
+    }
   })
 
   keyPress('space', () => {
@@ -265,16 +257,10 @@ requires: finish line to go to next lvl*/
       player.jump(CURRENT_JUMP_FORCE)
     }
   })
-
 })
 
-scene('lose', ({
-  score
-}) => {
-  add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
+scene('lose', ({ score }) => {
+  add([text(score, 32), origin('center'), pos(width()/2, height()/ 2)])
 })
 
-start("game", {
-  level: 0,
-  score: 0
-})
+start("game", { level: 0, score: 0})
