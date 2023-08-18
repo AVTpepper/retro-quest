@@ -43,7 +43,10 @@ loadSprite('blue-surprise', 'RMqCc1G.png')
 
 
 
-scene("game", ({ level, score }) => {
+scene("game", ({
+  level,
+  score
+}) => {
   layers(['bg', 'obj', 'ui'], 'obj')
 
   // Add the background
@@ -51,7 +54,7 @@ scene("game", ({ level, score }) => {
     sprite('background'),
     layer('bg'),
     pos(0, 0),
-    scale(1.9 , .495) // Scale the background to fit the screen
+    scale(1.9, .495) // Scale the background to fit the screen
   ])
 
   const maps = [
@@ -68,17 +71,17 @@ scene("game", ({ level, score }) => {
       '==============================   =====',
     ],
     [
-        '                                                                                 ',
-        '                                                                                 ',
-        '                                                                                 ',
-        '                                                                                 ',
-        '                                                                                 ',
-        '     %   =*=%=                                                                   ',
-        '                                                                                 ',
-        '                            -+                                                   ',
-        '           ^         ^   ^  ()   ^                         ^    ^                ',
-        '=================  ==========================  ======  ==================   =====',
-      ],
+      '                                                                                 ',
+      '                                                                                 ',
+      '                                                                                 ',
+      '                                                                                 ',
+      '                                                                                 ',
+      '     %   =*=%=                                                                   ',
+      '                                                                                 ',
+      '                            -+                                                   ',
+      '           ^         ^   ^  ()   ^                         ^    ^                ',
+      '=================  ==========================  ======  ==================   =====',
+    ],
     [
       '£                                       £',
       '£                                       £',
@@ -90,7 +93,24 @@ scene("game", ({ level, score }) => {
       '£                        x x x x  x   -+£',
       '£               z   z  x x x x x  x   ()£',
       '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-    ]
+    ],
+    /* level by q 
+problems: evil shrooms don't fall; evil shrooms should move back and forth
+requires: mushroom to also increase jump force
+requires: finish line to go to next lvl*/
+    [
+      '                                                                                                                    ',
+      '                                                  *                           $$$$$$                                ',
+      '                                                                            ===========                             ',
+      '                                               =======                                                              ',
+      '                 $$$                                                                                                ',
+      '               =======                                   %%%%%         ^                                            ',
+      '                                                                 =======                           ^                ',
+      '          ====          =%%%%%=                                =========        *         ==========                ',
+      '                                            ^                ===========                               $$           ',
+      '=========         ^             ^        ======            =============                             ======         ',
+      '           ========  ====================      ======  ==================   =====                            =======',
+    ],
   ]
 
   const levelCfg = {
@@ -126,8 +146,8 @@ scene("game", ({ level, score }) => {
     }
   ])
 
-  add([text('level ' + parseInt(level + 1) ), pos(40, 6)])
-  
+  add([text('level ' + parseInt(level + 1)), pos(40, 6)])
+
   function big() {
     let timer = 0
     let isBig = false
@@ -153,7 +173,7 @@ scene("game", ({ level, score }) => {
       biggify(time) {
         this.scale = vec2(2)
         timer = time
-        isBig = true     
+        isBig = true
       }
     }
   }
@@ -174,12 +194,12 @@ scene("game", ({ level, score }) => {
     if (obj.is('coin-surprise')) {
       gameLevel.spawn('$', obj.gridPos.sub(0, 1))
       destroy(obj)
-      gameLevel.spawn('}', obj.gridPos.sub(0,0))
+      gameLevel.spawn('}', obj.gridPos.sub(0, 0))
     }
     if (obj.is('mushroom-surprise')) {
       gameLevel.spawn('#', obj.gridPos.sub(0, 1))
       destroy(obj)
-      gameLevel.spawn('}', obj.gridPos.sub(0,0))
+      gameLevel.spawn('}', obj.gridPos.sub(0, 0))
     }
   })
 
@@ -202,14 +222,18 @@ scene("game", ({ level, score }) => {
     if (isJumping) {
       destroy(d)
     } else {
-      go('lose', { score: scoreLabel.value})
+      go('lose', {
+        score: scoreLabel.value
+      })
     }
   })
 
   player.action(() => {
     camPos(player.pos)
     if (player.pos.y >= FALL_DEATH) {
-      go('lose', { score: scoreLabel.value})
+      go('lose', {
+        score: scoreLabel.value
+      })
     }
   })
 
@@ -231,7 +255,7 @@ scene("game", ({ level, score }) => {
   })
 
   player.action(() => {
-    if(player.grounded()) {
+    if (player.grounded()) {
       isJumping = false
     }
   })
@@ -244,8 +268,13 @@ scene("game", ({ level, score }) => {
   })
 })
 
-scene('lose', ({ score }) => {
-  add([text(score, 32), origin('center'), pos(width()/2, height()/ 2)])
+scene('lose', ({
+  score
+}) => {
+  add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
 })
 
-start("game", { level: 0, score: 0})
+start("game", {
+  level: 0,
+  score: 0
+})
