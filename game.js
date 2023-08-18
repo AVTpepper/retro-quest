@@ -23,7 +23,7 @@ let isJumping = true
 loadSprite('background1', '/assets/images/background.png')
 loadSprite('background2', '/assets/images/background2.png')
 loadSprite('background3', '/assets/images/background3.png')
-
+loadSprite('turtle', 'assets/images/turtle.png')
 
 
 loadRoot('https://i.imgur.com/')
@@ -76,41 +76,61 @@ scene("game", ({ level, score }) => {
 
     const maps = [
         [
-            '                                      ',
-            '                                      ',
-            '                                      ',
-            '                                      ',
-            '                                      ',
-            '     %   =*=%=                        ',
-            '                                      ',
-            '                            -+        ',
-            '                    ^   ^   ()        ',
-            '==============================   =====',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '    %   ==*=%=                        %=*=%=                                                        % ',
+            '                                                                                                     ',
+            '                            -+                                     -+                         -+     ',
+            '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
+            '=================  ==========================  ======  ==================   =============== =========',
         ],
         [
-            '                                                                                 ',
-            '                                                                                 ',
-            '                                                                                 ',
-            '                                                                                 ',
-            '                                                                                 ',
-            '     %   =*=%=                                                                   ',
-            '                                                                                 ',
-            '                            -+                                                   ',
-            '           ^         ^   ^  ()   ^                         ^    ^                ',
-            '=================  ==========================  ======  ==================   =====',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £',
+            '£                          x x x     =*=%=                                                             £',
+            '£                        x x x x  x                                                                  -+£',
+            '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
         ],
+        /* level by q
+    problems: evil shrooms don't fall; evil shrooms should move back and forth
+    requires: mushroom to also increase jump force
+    requires: finish line to go to next lvl*/
         [
-            '£                                       £',
-            '£                                       £',
-            '£                                       £',
-            '£                                       £',
-            '£                                       £',
-            '£        @@@@@@              x x        £',
-            '£                          x x x        £',
-            '£                        x x x x  x   -+£',
-            '£               z   z  x x x x x  x   ()£',
-            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-        ]
+            '                                                                                                                    ',
+            '                                                  *                           $$$$$$                                ',
+            '                                                                            ===========                             ',
+            '                                               =======                                                              ',
+            '                 $$$                                                                                                ',
+            '               =======                                   %%%%%         ^                                            ',
+            '                                                                 =======                           ^                ',
+            '          ====          =%%%%%=                                =========        *         ==========                ',
+            '                                            ^                ===========                               $$           ',
+            '=========         ^             ^        ======            =============                             ======         ',
+            '           ========  ====================      ======  ==================   =====                            =======',
+        ],
+        // level design by james
+        [
+            '!                                                                                                                   ',
+            '!                                                                                                    $              ',
+            '!                                                                                                ==  =              ',
+            '!                                                                  $$$                       ==                     ',
+            '!                      ^                                          }}}}}     *%%                          !  !       ',
+            '!                   =*===                                                                 $              !$$!       ',
+            '!               $                                              }         =======          x              !$$!       ',
+            '!              &x                   xx                      }                            xxx             !$$!       ',
+            '!             $xxx$     ===   %%%   ()               =%%=                               xxxxx&           !  !       ',
+            '!            $xxxxx$                ()xx                              x                xxxxxxx                  -+  ',
+            '!            xxxxxxx                ()()             ^ ^             xxx        &     xxxxxxxxx                 ()  ',
+            '==========================    ==============================         ===============================================',
+        ],
     ]
 
     const levelCfg = {
@@ -132,6 +152,7 @@ scene("game", ({ level, score }) => {
         'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
         '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
         'x': [sprite('blue-steel'), solid(), scale(0.5)],
+        '&': [sprite('turtle'), 'turtle', 'dangerous']
 
     }
 
@@ -241,6 +262,10 @@ scene("game", ({ level, score }) => {
             })
         })
     })
+
+    action('turtle', (t) => {
+        t.move(-ENEMY_SPEED, 0);
+    });
 
     keyDown('left', () => {
         player.move(-MOVE_SPEED, 0)
