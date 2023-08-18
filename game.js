@@ -21,6 +21,7 @@ const ENEMY_SPEED = 20
 let isJumping = true
 
 loadSprite('background', '/assets/images/background.png')
+loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
@@ -54,45 +55,34 @@ scene("game", ({
     sprite('background'),
     layer('bg'),
     pos(0, 0),
-    scale(1.9, .495) // Scale the background to fit the screen
+    scale(4.9, .495) // Scale the background to fit the screen
   ])
 
   const maps = [
+
     [
-      '                                      ',
-      '                                      ',
-      '                                      ',
-      '                                      ',
-      '                                      ',
-      '     %   =*=%=                        ',
-      '                                      ',
-      '                            -+        ',
-      '                    ^   ^   ()        ',
-      '==============================   =====',
+      '                                                                                                     ',
+      '                                                                                                     ',
+      '                                                                                                     ',
+      '                                                                                                     ',
+      '                                                                                                     ',
+      '    %   =*=%=                        %=*=%=                                                        % ',
+      '                                                                                                     ',
+      '                            -+                                     -+                         -+     ',
+      '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
+      '=================  ==========================  ======  ==================   =============== =========',
     ],
     [
-      '                                                                                 ',
-      '                                                                                 ',
-      '                                                                                 ',
-      '                                                                                 ',
-      '                                                                                 ',
-      '     %   =*=%=                                                                   ',
-      '                                                                                 ',
-      '                            -+                                                   ',
-      '           ^         ^   ^  ()   ^                         ^    ^                ',
-      '=================  ==========================  ======  ==================   =====',
-    ],
-    [
-      '£                                       £',
-      '£                                       £',
-      '£                                       £',
-      '£                                       £',
-      '£                                       £',
-      '£        @@@@@@              x x        £',
-      '£                          x x x        £',
-      '£                        x x x x  x   -+£',
-      '£               z   z  x x x x x  x   ()£',
-      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £',
+      '£                          x x x     =*=%=                                                             £',
+      '£                        x x x x  x                                                                  -+£',
+      '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
+      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
     ],
     /* level by q 
 problems: evil shrooms don't fall; evil shrooms should move back and forth
@@ -132,7 +122,7 @@ requires: finish line to go to next lvl*/
     'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
     '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
     'x': [sprite('blue-steel'), solid(), scale(0.5)],
-
+    '&': [sprite('turtle'), 'turtle'],
   }
 
   const gameLevel = addLevel(maps[level], levelCfg)
@@ -245,19 +235,28 @@ requires: finish line to go to next lvl*/
       })
     })
   })
+  // add turtle
+  player.collides('turtle', (t) => {
+    if (player.grounded()) {
+      destroy(t);
+      go('lose', {
+        score: scoreLabel.value
+      });
+    } else {
+      destroy(t);
+    }
+  });
 
-  keyDown('left', () => {
-    player.move(-MOVE_SPEED, 0)
-  })
+  action('turtle', (t) => {
+    t.move(-ENEMY_SPEED, 0);
+  });
 
   keyDown('right', () => {
     player.move(MOVE_SPEED, 0)
   })
 
-  player.action(() => {
-    if (player.grounded()) {
-      isJumping = false
-    }
+  keyDown('left', () => {
+    player.move(-MOVE_SPEED, 0)
   })
 
   keyPress('space', () => {
@@ -266,6 +265,7 @@ requires: finish line to go to next lvl*/
       player.jump(CURRENT_JUMP_FORCE)
     }
   })
+
 })
 
 scene('lose', ({
