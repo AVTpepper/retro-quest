@@ -1,3 +1,3 @@
 ## Collaborators
 
-## Test string - Julia 
+## Test string
