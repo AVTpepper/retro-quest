@@ -84,30 +84,6 @@ scene("game", ({
       '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
       '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
     ],
-
-      '                                                                                 ',
-      '                                                                                 ',
-      '                                                                                 ',
-      '                                                                                 ',
-      '                                                                                 ',
-      '     %   =*=%=                                                                   ',
-      '                                                                                 ',
-      '                            -+                                                   ',
-      '           ^         ^   ^  ()   ^                         ^    ^                ',
-      '=================  ==========================  ======  ==================   =====',
-    ],
-    [
-      '£                                       £',
-      '£                                       £',
-      '£                                       £',
-      '£                                       £',
-      '£                                       £',
-      '£        @@@@@@              x x        £',
-      '£                          x x x        £',
-      '£                        x x x x  x   -+£',
-      '£               z   z  x x x x x  x   ()£',
-      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-    ],
     /* level by q 
 problems: evil shrooms don't fall; evil shrooms should move back and forth
 requires: mushroom to also increase jump force
@@ -275,8 +251,21 @@ requires: finish line to go to next lvl*/
     t.move(-ENEMY_SPEED, 0);
   });
 
-keyDown('left', () => {
-  player.move(-MOVE_SPEED, 0)
+  keyDown('right', () => {
+    player.move(MOVE_SPEED, 0)
+  })
+
+  keyDown('left', () => {
+    player.move(-MOVE_SPEED, 0)
+  })
+
+  keyPress('space', () => {
+    if (player.grounded()) {
+      isJumping = true
+      player.jump(CURRENT_JUMP_FORCE)
+    }
+  })
+
 })
 
 scene('lose', ({
