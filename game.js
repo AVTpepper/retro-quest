@@ -21,6 +21,7 @@ const ENEMY_SPEED = 20
 let isJumping = true
 
 loadSprite('background', '/assets/images/background.png')
+loadSprite('turtle', 'assets/images/turtle.png')
 loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
@@ -65,20 +66,20 @@ scene("game", ({ level, score }) => {
         '    %   =*=%=                        %=*=%=                                                        % ',
         '                                                                                                     ',
         '                            -+                                     -+                         -+     ',
-        '           ^         ^   ^  ()   ^                         ^    ^  ()                         ()     ',
+        '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
         '=================  ==========================  ======  ==================   =============== =========',
       ],
     [
-      '£                                                                                 £',
-      '£                                                                                 £',
-      '£                                                                                 £',
-      '£                                                                                 £',
-      '£                                                                                 £',
-      '£  @@@@@@   =*=%=            x x                                                  £',
-      '£                          x x x     =*=%=                                        £',
-      '£                        x x x x  x                                             -+£',
-      '£                   z  x x x x x  x                                             ()£',
-      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!!    !!!!!!!!!!! ',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£                                                                                                      £',
+      '£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £',
+      '£                          x x x     =*=%=                                                             £',
+      '£                        x x x x  x                                                                  -+£',
+      '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
+      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
     ], 
     
   ]
@@ -102,6 +103,7 @@ scene("game", ({ level, score }) => {
     'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
     '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
     'x': [sprite('blue-steel'), solid(), scale(0.5)],
+    '&': [sprite('turtle'), 'turtle'],
 
   }
 
@@ -211,6 +213,20 @@ scene("game", ({ level, score }) => {
       })
     })
   })
+  
+  player.collides('turtle', (t) => {
+    if (player.grounded()) {
+      destroy(t);
+      go('lose', { score: scoreLabel.value });
+    } else {
+      destroy(t);
+    }
+  });
+
+  action('turtle', (t) => {
+    t.move(-ENEMY_SPEED, 0);
+  });
+
 
   keyDown('left', () => {
     player.move(-MOVE_SPEED, 0)
@@ -239,3 +255,6 @@ scene('lose', ({ score }) => {
 })
 
 start("game", { level: 0, score: 0})
+
+
+
