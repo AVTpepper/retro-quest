@@ -42,8 +42,6 @@ loadSprite('blue-steel', 'gqVoI2b.png')
 loadSprite('blue-evil-shroom', 'SvV4ueD.png')
 loadSprite('blue-surprise', 'RMqCc1G.png')
 
-
-
 scene("game", ({
   level,
   score
@@ -125,6 +123,21 @@ requires: finish line to go to next lvl*/
       '=========         ^             ^        ======            =============                             ======         ',
       '           ========  ====================      ======  ==================   =====                            =======',
     ],
+    // level design by james
+    [
+        '!                                                                                                                   ',
+        '!                                                                                                    $              ',
+        '!                                                                                                ==  =              ',
+        '!                                                                  $$$                       ==                     ',
+        '!                      ^                                          }}}}}     *%%                          !  !       ',
+        '!                   =*===                                                                 $              !$$!       ',
+        '!               $                                              }         =======          x              !$$!       ',
+        '!              &x                   xx                      }                            xxx             !$$!       ',
+        '!             $xxx$     ===   %%%   ()               =%%=                               xxxxx&           !  !       ',
+        '!            $xxxxx$                ()xx                              x                xxxxxxx                  -+  ',
+        '!            xxxxxxx                ()()             ^ ^             xxx        &     xxxxxxxxx                 ()  ',
+        '==========================    ==============================         ===============================================',
+      ],
   ]
 
   const levelCfg = {
@@ -276,8 +289,21 @@ requires: finish line to go to next lvl*/
     t.move(-ENEMY_SPEED, 0);
   });
 
-keyDown('left', () => {
-  player.move(-MOVE_SPEED, 0)
+  keyDown('right', () => {
+    player.move(MOVE_SPEED, 0)
+  })
+
+  keyDown('left', () => {
+    player.move(-MOVE_SPEED, 0)
+  })
+
+  keyPress('space', () => {
+    if (player.grounded()) {
+      isJumping = true
+      player.jump(CURRENT_JUMP_FORCE)
+    }
+  })
+
 })
 
 scene('lose', ({
@@ -289,4 +315,4 @@ scene('lose', ({
 start("game", {
   level: 0,
   score: 0
-})})
+})
