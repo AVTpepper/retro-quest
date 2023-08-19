@@ -61,11 +61,11 @@ loadSprite("pipe-top-right", "hj2GK4n.png");
 loadSprite("pipe-bottom-left", "c1cYSbt.png");
 loadSprite("pipe-bottom-right", "nqQ79eI.png");
 
-loadSprite("blue-block", "fVscIbn.png");
-loadSprite("blue-brick", "3e5YRQd.png");
-loadSprite("blue-steel", "gqVoI2b.png");
-loadSprite("blue-evil-shroom", "SvV4ueD.png");
-loadSprite("blue-surprise", "RMqCc1G.png");
+loadSprite('blue-block', 'fVscIbn.png')
+loadSprite('blue-brick', '3e5YRQd.png')
+loadSprite('blue-steel', 'gqVoI2b.png')
+loadSprite('blue-evil-shroom', 'SvV4ueD.png')
+loadSprite('blue-surprise', 'RMqCc1G.png')
 
 // selection screen
 const characters = ["mario", "luigi", "peach", "donkey-kong"];
@@ -73,26 +73,37 @@ const characters = ["mario", "luigi", "peach", "donkey-kong"];
 scene("characterSelect", () => {
   layers(["bg", "obj", "ui"], "obj");
 
-  add([sprite("background"), layer("bg"), pos(0, 0), scale(1.9, 0.495)]);
+    add([
+        sprite('background'),
+        layer('bg'),
+        origin('center'),
+        pos(width() / 2, height() / 4),
+        scale(1.9, .495)
+    ])
 
-  let selectedCharacter = 0;
+    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
+    add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
+    add([text("Left and right arrows: Move character left and right", 8), origin('center'), pos(width() / 2, (height() / 2) + 100)])
+    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
 
-  function drawCharacters() {
-    characters.forEach((character, index) => {
-      const position = vec2(40 + index * 80, 100);
-      const spriteName = character;
-      const isSelected = index === selectedCharacter;
-      add([
-        sprite(spriteName),
-        pos(position),
-        scale(isSelected ? 1.5 : 1),
-        "character",
-        {
-          characterName: character,
-        },
-      ]);
-    });
-  }
+    let selectedCharacter = 0
+
+    function drawCharacters() {
+        characters.forEach((character, index) => {
+            const position = vec2((width() / 3) + index * 80, 100)
+            const spriteName = character
+            const isSelected = index === selectedCharacter
+            add([
+                sprite(spriteName),
+                pos(position),
+                scale(isSelected ? 1.5 : 1),
+                'character',
+                {
+                    characterName: character
+                }
+            ])
+        })
+    }
 
   drawCharacters();
 
@@ -378,28 +389,37 @@ scene("game", ({ character, level, score }) => {
     m.move(20, 0);
   });
 
-  player.on("headbump", (obj) => {
-    if (obj.is("coin-surprise")) {
-      gameLevel.spawn("$", obj.gridPos.sub(0, 1));
-      destroy(obj);
-      gameLevel.spawn("}", obj.gridPos.sub(0, 0));
-    }
-    if (obj.is("mushroom-surprise")) {
-      gameLevel.spawn("#", obj.gridPos.sub(0, 1));
-      destroy(obj);
-      gameLevel.spawn("}", obj.gridPos.sub(0, 0));
-    }
-    if (obj.is("star-surprise")) {
-      gameLevel.spawn(">", obj.gridPos.sub(0, 1));
-      destroy(obj);
-      gameLevel.spawn("}", obj.gridPos.sub(0, 0));
-    }
-    if (obj.is("fire-surprise")) {
-      gameLevel.spawn("f", obj.gridPos.sub(0, 1));
-      destroy(obj);
-      gameLevel.spawn("}", obj.gridPos.sub(0, 0));
-    }
-  });
+    player.on("headbump", (obj) => {
+        if (obj.is('coin-surprise')) {
+            gameLevel.spawn('$', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
+        if (obj.is('mushroom-surprise')) {
+            gameLevel.spawn('#', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
+        if (obj.is('star-surprise')) {
+            gameLevel.spawn('>', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
+        if (obj.is('fire-surprise')) {
+            gameLevel.spawn('f', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
+        if (obj.is('dangerous')) {
+            if (player.isBig) {
+                destroy(obj)
+                player.smallify()
+            } else
+                go('lose', {
+                score: scoreLabel.text
+            })
+        }
+    })
 
   player.collides("mushroom", (m) => {
     destroy(m);
@@ -448,6 +468,9 @@ scene("game", ({ character, level, score }) => {
     player.collides('dangerous', (d) => {
         if (isJumping || isInvincible) {
             destroy(d)
+        } else if (player.isBig) {
+            destroy(d)
+            player.smallify()
         } else {
             go('lose', {
                 score: scoreLabel.text
@@ -504,6 +527,5 @@ scene('lose', ({ score }) => {
     })
 })
 
-start("characterSelect");
-
+start("characterSelect")
 // start("game", { level: 0, score: 0 })
