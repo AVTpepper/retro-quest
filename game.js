@@ -89,11 +89,31 @@ scene("characterSelect", () => {
     scale(1.9, 0.495),
   ]);
 
-    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
-    add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
-    add([text("Left and right arrows: Move character left and right", 8), origin('center'), pos(width() / 2, (height() / 2) + 100)])
-    add([text("Down arrow: Use a pipe to move to the next level", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
-    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 140)])
+  add([
+    text("Use arrow keys to select character and 'space' to start the game", 8),
+    origin("center"),
+    pos(width() / 2, height() / 2 + 20),
+  ]);
+  add([
+    text("Controls:", 8),
+    origin("center"),
+    pos(width() / 2, height() / 2 + 60),
+  ]);
+  add([
+    text("Left and right arrows: Move character left and right", 8),
+    origin("center"),
+    pos(width() / 2, height() / 2 + 100),
+  ]);
+  add([
+    text("Down arrow: Use a pipe to move to the next level", 8),
+    origin("center"),
+    pos(width() / 2, height() / 2 + 120),
+  ]);
+  add([
+    text("Space: Jump, F: Use power-up ability", 8),
+    origin("center"),
+    pos(width() / 2, height() / 2 + 140),
+  ]);
 
   let selectedCharacter = 0;
 
@@ -141,7 +161,6 @@ scene("characterSelect", () => {
 scene("game", ({ character, level, score }) => {
   layers(["bg", "obj", "ui"], "obj");
 
-
   let backgroundSprite;
   switch (level) {
     case 0:
@@ -153,53 +172,47 @@ scene("game", ({ character, level, score }) => {
     case 2:
       backgroundSprite = "background3";
       break;
-        case 3:
-            backgroundSprite = "background3";
-            break;
-        case 4:
-            backgroundSprite = "background3";
-            break;
-        case 5:
-            backgroundSprite = "background3";
-            break;
-        case 6:
-            backgroundSprite = "background3";
-            break;
-        case 7:
-            backgroundSprite = "background3";
-            break;
-
+    case 3:
+      backgroundSprite = "background3";
+      break;
+    case 4:
+      backgroundSprite = "background3";
+      break;
+    case 5:
+      backgroundSprite = "background3";
+      break;
+    case 6:
+      backgroundSprite = "background3";
+      break;
+    case 7:
+      backgroundSprite = "background3";
+      break;
 
     default:
       backgroundSprite = "background1";
   }
-    add([
-        sprite(backgroundSprite),
-        layer("bg"),
-        pos(0, 0),
-        scale(1.9, .495)
-    ]);
+  add([sprite(backgroundSprite), layer("bg"), pos(0, 0), scale(1.9, 0.495)]);
 
-  const spriteWidth = 400; 
-  const levelWidth = 1750; 
+  const spriteWidth = 400;
+  const levelWidth = 1750;
 
   const numberOfRepeats = Math.ceil(levelWidth / spriteWidth);
 
   for (let i = 0; i < numberOfRepeats; i++) {
     add([
-      sprite(backgroundSprite), 
-      layer("bg"), 
-      pos(i * spriteWidth, 0),  
-      scale(1.9, 0.495)
+      sprite(backgroundSprite),
+      layer("bg"),
+      pos(i * spriteWidth, 0),
+      scale(1.9, 0.495),
     ]);
   }
 
-    // add([
-    //     sprite("background"),
-    //     layer('bg'),
-    //     origin('center'),
-    //     pos(width() / 2, height() / 4),
-    //     scale(1.9, .495)
+  // add([
+  //     sprite("background"),
+  //     layer('bg'),
+  //     origin('center'),
+  //     pos(width() / 2, height() / 4),
+  //     scale(1.9, .495)
 
   const maps = [
     //Test level for new items
@@ -302,39 +315,39 @@ scene("game", ({ character, level, score }) => {
     ],
   ];
 
-    const levelCfg = {
-        width: 20,
-        height: 20,
-        '=': [sprite('block'), solid()],
-        '$': [sprite('coin'), 'coin'],
-        '%': [sprite('surprise'), solid(), 'coin-surprise'],
-        '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
-        '<': [sprite('surprise'), solid(), 'star-surprise'],
-        'g': [sprite('surprise'), solid(), 'fire-surprise'],
-        '}': [sprite('unboxed'), solid()],
-        '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
-        ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
-        '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
-        '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
-        '^': [sprite('evil-shroom'), solid(), 'dangerous', body()],
-        '#': [sprite('mushroom'), solid(), 'mushroom', body()],
-        '!': [sprite('blue-block'), solid(), scale(0.5)],
-        '£': [sprite('blue-brick'), solid(), scale(0.5)],
-        'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
-        '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
-        'x': [sprite('blue-steel'), solid(), scale(0.5)],
-        '&': [sprite('turtle'), 'turtle', 'dangerous'],
-        '>': [sprite('star'), 'star'],
-        'f': [sprite('fireflower'), 'fireflower'],
-        //new
-        'q': [sprite('fly-guy'), solid(), 'dangerous'],
-        'w': [sprite('goomba'), solid(), 'dangerous'],
-        'e': [sprite('koopa-green'), solid(), 'dangerous'],
-        'r': [sprite('shy-guy'), solid(), 'dangerous'],
-        't': [sprite('wild-piranha'), solid(), 'dangerous'],
-        'y': [sprite('flagcastle'), solid()],
-        'u': [sprite('goldblock'), solid()],
-    }
+  const levelCfg = {
+    width: 20,
+    height: 20,
+    "=": [sprite("block"), solid()],
+    $: [sprite("coin"), "coin"],
+    "%": [sprite("surprise"), solid(), "coin-surprise"],
+    "*": [sprite("surprise"), solid(), "mushroom-surprise"],
+    "<": [sprite("surprise"), solid(), "star-surprise"],
+    g: [sprite("surprise"), solid(), "fire-surprise"],
+    "}": [sprite("unboxed"), solid()],
+    "(": [sprite("pipe-bottom-left"), solid(), scale(0.5)],
+    ")": [sprite("pipe-bottom-right"), solid(), scale(0.5)],
+    "-": [sprite("pipe-top-left"), solid(), scale(0.5), "pipe"],
+    "+": [sprite("pipe-top-right"), solid(), scale(0.5), "pipe"],
+    "^": [sprite("evil-shroom"), solid(), "dangerous", body()],
+    "#": [sprite("mushroom"), solid(), "mushroom", body()],
+    "!": [sprite("blue-block"), solid(), scale(0.5)],
+    "£": [sprite("blue-brick"), solid(), scale(0.5)],
+    z: [sprite("blue-evil-shroom"), solid(), scale(0.5), "dangerous"],
+    "@": [sprite("blue-surprise"), solid(), scale(0.5), "coin-surprise"],
+    x: [sprite("blue-steel"), solid(), scale(0.5)],
+    "&": [sprite("turtle"), "turtle", "dangerous"],
+    ">": [sprite("star"), "star"],
+    f: [sprite("fireflower"), "fireflower"],
+    //new
+    q: [sprite("fly-guy"), solid(), "dangerous"],
+    w: [sprite("goomba"), solid(), "dangerous"],
+    e: [sprite("koopa-green"), solid(), "dangerous"],
+    r: [sprite("shy-guy"), solid(), "dangerous"],
+    t: [sprite("wild-piranha"), solid(), "dangerous"],
+    y: [sprite("flagcastle"), solid()],
+    u: [sprite("goldblock"), solid()],
+  };
 
   const gameLevel = addLevel(maps[level], levelCfg);
 
@@ -419,39 +432,39 @@ scene("game", ({ character, level, score }) => {
     });
   }
 
-    function firePower() {
-        let timer = 0
-        let hasFire = false
-        return {
-            update() {
-                if (hasFire) {
-                    keyPress('f', () => {
-                        spawnFireball(player.pos.sub(-10, 10))
-                    })
-                    action('fireball', (f) => {
-                        f.move(MOVE_SPEED, 0)
-                    })
-                    while (timer > 0) {
-                        timer -= 1
-                        if (timer <= 0) {
-                            this.noFire()
-                        }
-                    }
-                }
-            },
-            hasFire() {
-                return hasFire
-            },
-            noFire() {
-                timer = 0
-                hasFire = false
-            },
-            fireUp(time) {
-                timer = time
-                hasFire = true
+  function firePower() {
+    let timer = 0;
+    let hasFire = false;
+    return {
+      update() {
+        if (hasFire) {
+          keyPress("f", () => {
+            spawnFireball(player.pos.sub(-10, 10));
+          });
+          action("fireball", (f) => {
+            f.move(MOVE_SPEED, 0);
+          });
+          while (timer > 0) {
+            timer -= 1;
+            if (timer <= 0) {
+              this.noFire();
             }
+          }
         }
-    }
+      },
+      hasFire() {
+        return hasFire;
+      },
+      noFire() {
+        timer = 0;
+        hasFire = false;
+      },
+      fireUp(time) {
+        timer = time;
+        hasFire = true;
+      },
+    };
+  }
 
   const player = add([
     sprite(character),
@@ -582,37 +595,37 @@ scene("game", ({ character, level, score }) => {
     player.move(CURRENT_MOVE_SPEED, 0);
   });
 
-    player.action(() => {
-        if (player.grounded()) {
-            isJumping = false;
-            if (keyIsDown("left")) {
-                player.move(-CURRENT_MOVE_SPEED, 0);
-                player.scale.x = -1; // Flip the sprite horizontally
-            } else if (keyIsDown("right")) {
-                player.move(CURRENT_MOVE_SPEED, 0);
-                player.scale.x = 1; // Reset the sprite to its original orientation
-            }
-        }
-    });
+  player.action(() => {
+    if (player.grounded()) {
+      isJumping = false;
+      if (keyIsDown("left")) {
+        player.move(-CURRENT_MOVE_SPEED, 0);
+        player.scale.x = -1; // Flip the sprite horizontally
+      } else if (keyIsDown("right")) {
+        player.move(CURRENT_MOVE_SPEED, 0);
+        player.scale.x = 1; // Reset the sprite to its original orientation
+      }
+    }
+  });
 
-    keyPress("space", () => {
-        if (player.grounded()) {
-            isJumping = true;
-            player.jump(CURRENT_JUMP_FORCE);
-        }
-    });
-
-scene("lose", ({ score }) => {
-  add([text(score, 32), origin("center"), pos(width() / 2, height() / 2)]);
-  add([
-    text("Press 'space' to restart the game!", 16),
-    origin("center"),
-    pos(width() / 2, height() / 2 + 40),
-  ]);
   keyPress("space", () => {
-    go("characterSelect");
+    if (player.grounded()) {
+      isJumping = true;
+      player.jump(CURRENT_JUMP_FORCE);
+    }
   });
 });
+  scene("lose", ({ score }) => {
+    add([text(score, 32), origin("center"), pos(width() / 2, height() / 2)]);
+    add([
+      text("Press 'space' to restart the game!", 16),
+      origin("center"),
+      pos(width() / 2, height() / 2 + 40),
+    ]);
+    keyPress("space", () => {
+      go("characterSelect");
+    });
+  });
 
-start("characterSelect");
 
+  start("characterSelect");
