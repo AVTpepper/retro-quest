@@ -275,12 +275,12 @@ scene('game', ({ level, score }) => {
     // player controls and logic
     onKeyDown('right', () => {
         player.move(CURRENT_MOVE_SPEED, 0)
-        player.flipX(true)
+        // player.flipX(true)
     })
 
     onKeyDown('left', () => {
         player.move(-CURRENT_MOVE_SPEED, 0)
-        player.flipX(false)
+        // player.flipX(false)
     })
 
     onKeyPress('space', () => {

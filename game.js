@@ -21,8 +21,9 @@ const ENEMY_SPEED = 20
 
 let isJumping = true
 let isInvincible = false
+let hasFire = true
 
-loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
+// loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite('background', '/assets/images/background.png')
 loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
@@ -30,10 +31,16 @@ loadSprite('background1', '/assets/images/background.png')
 loadSprite('background2', '/assets/images/background2.png')
 loadSprite('background3', '/assets/images/background3.png')
 loadSprite('turtle', 'assets/images/turtle.png')
+loadSprite('fireball', 'assets/images/fireball.png')
+loadSprite('fireflower', 'assets/images/fire-flower.png')
 
 
 loadRoot('https://i.imgur.com/')
-// loadSprite('mario', 'Wb1qfhK.png')
+loadSprite('mario', 'Wb1qfhK.png')
+loadSprite('luigi', 'pogC9x5.png')
+loadSprite('peach', 'KPO3fR9.png')
+loadSprite('donkey-kong', 'bdrLpi6.png')
+
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
 loadSprite('brick', 'pogC9x5.png')
@@ -54,7 +61,66 @@ loadSprite('blue-surprise', 'RMqCc1G.png')
 
 
 
-scene("game", ({ level, score }) => {
+
+// selection screen
+const characters = ['mario', 'luigi', 'peach', 'donkey-kong']
+
+scene('characterSelect', () => {
+    layers(['bg', 'obj', 'ui'], 'obj')
+
+    add([
+        sprite('background'),
+        layer('bg'),
+        pos(0, 0),
+        scale(1.9, .495)
+    ])
+
+
+    let selectedCharacter = 0
+
+    function drawCharacters() {
+        characters.forEach((character, index) => {
+            const position = vec2(40 + index * 80, 100)
+            const spriteName = character
+            const isSelected = index === selectedCharacter
+            add([
+                sprite(spriteName),
+                pos(position),
+                scale(isSelected ? 1.5 : 1),
+                'character',
+                {
+                    characterName: character
+                }
+            ])
+        })
+    }
+
+    drawCharacters()
+
+    keyPress('right', () => {
+        selectedCharacter = (selectedCharacter + 1) % characters.length
+        destroyAll('character')
+        drawCharacters()
+    })
+
+    keyPress('left', () => {
+        selectedCharacter = (selectedCharacter - 1 + characters.length) % characters.length
+        destroyAll('character')
+        drawCharacters()
+    })
+
+    keyPress('space', () => {
+        go('game', {
+            character: characters[selectedCharacter],
+            level: 0,
+            score: 0
+        })
+    })
+})
+
+
+
+scene("game", ({ character, level, score }) => {
     layers(['bg', 'obj', 'ui'], 'obj')
 
     let backgroundSprite;
@@ -87,8 +153,8 @@ scene("game", ({ level, score }) => {
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
-            '    %   ==*=%=                        %=*=%=                                                        % ',
-            '                                                                                                     ',
+            '       <=*=%=                        %=*=%=                                                        % ',
+            '    g                                                                                                ',
             '                            -+                                     -+                         -+     ',
             '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
             '=================  ==========================  ======  ==================   =============== =========',
@@ -148,6 +214,7 @@ scene("game", ({ level, score }) => {
         '%': [sprite('surprise'), solid(), 'coin-surprise'],
         '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
         '<': [sprite('surprise'), solid(), 'star-surprise'],
+        'g': [sprite('surprise'), solid(), 'fire-surprise'],
         '}': [sprite('unboxed'), solid()],
         '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
         ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
@@ -162,6 +229,7 @@ scene("game", ({ level, score }) => {
         'x': [sprite('blue-steel'), solid(), scale(0.5)],
         '&': [sprite('turtle'), 'turtle', 'dangerous'],
         '>': [sprite('star'), 'star'],
+        'f': [sprite('fireflower'), 'fireflower']
     }
 
     const gameLevel = addLevel(maps[level], levelCfg)
@@ -232,14 +300,53 @@ scene("game", ({ level, score }) => {
         }
     }
 
+    function spawnFireball(p) {
+        const fireball = add([sprite('fireball'), pos(p), 'fireball'])
+        fireball.collides('dangerous', (d) => {
+            destroy(d)
+            destroy(fireball)
+        })
+        wait(1.5, () => {
+            destroy(fireball)
+        })
+    }
+
+    function firePower() {
+        let timer = 0
+        return {
+            update() {
+                if(hasFire) {
+                    keyPress('f', () => {
+                        spawnFireball(player.pos.sub(1, 0))
+                    })
+                    action('fireball', (f) => {
+                        f.move(MOVE_SPEED, 0)
+                    })
+                    timer -= dt()
+                    if (timer <= 0) {
+                        this.noFire()
+                    }
+                }    
+            },
+            noFire() {
+                hasFire = false
+                timer = 0
+            },
+            fireUp(time) {
+                timer = time
+                hasFire = true
+            }
+        }
+    }
+
     const player = add([
-        sprite('mario'),
+        sprite(character),
         solid(),
         pos(30, 0),
         body(),
         big(),
         star(),
-        origin('bot'),
+        firePower(),
     ])
 
     action('mushroom', (m) => {
@@ -262,6 +369,11 @@ scene("game", ({ level, score }) => {
             destroy(obj)
             gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
+        if (obj.is('fire-surprise')) {
+            gameLevel.spawn('f', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
     })
 
     player.collides('mushroom', (m) => {
@@ -280,6 +392,11 @@ scene("game", ({ level, score }) => {
         player.starUp(6)
     })
 
+    player.collides('fireflower', (f) => {
+        destroy(f)
+        player.fireUp(6)
+    })
+
     action('dangerous', (d) => {
         d.move(-ENEMY_SPEED, 0)
     })
@@ -296,6 +413,7 @@ scene("game", ({ level, score }) => {
     player.collides('pipe', () => {
         keyPress('down', () => {
             go('game', {
+                character: character,
                 level: (level + 1) % maps.length,
                 score: scoreLabel.value
             })
@@ -318,12 +436,10 @@ scene("game", ({ level, score }) => {
 
     keyDown('right', () => {
         player.move(CURRENT_MOVE_SPEED, 0)
-        player.flipX = false
     })
 
     keyDown('left', () => {
         player.move(-CURRENT_MOVE_SPEED, 0)
-        player.flipX = true
     })
 
     player.action(() => {
@@ -351,4 +467,7 @@ scene('lose', ({ score }) => {
     add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
 })
 
-start("game", { level: 0, score: 0 })
+
+start("characterSelect")
+
+// start("game", { level: 0, score: 0 })
