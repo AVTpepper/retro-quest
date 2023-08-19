@@ -204,7 +204,7 @@ scene("game", ({ character, level, score }) => {
             '£           %=%    $$$$$                                                                                  ',
             '£                > =====                                                                                  ',
             '£                               -+             =*=                                                        ',
-            '£            =====           -+ ()                   ===              @@@=*=%=            =%%=            ',
+            '£ vv         =====           -+ ()                   ===              @@@=*=%=            =%%=            ',
             '£       ======            -+ () ()      =%%=        ====                            -+           -+     y ',
             '£    f             ^      () () ()           ^     =====                     ^  ^   ()           ()       ',
             '£================================================================   ====================  ================',
@@ -329,6 +329,7 @@ scene("game", ({ character, level, score }) => {
         't': [sprite('wild-piranha'), solid(), 'dangerous'],
         'y': [sprite('flagcastle'), solid()],
         'u': [sprite('goldblock'), solid()],
+        'v': [sprite('brick'), solid(), 'brick']
     }
 
     const gameLevel = addLevel(maps[level], levelCfg)
@@ -522,6 +523,10 @@ scene("game", ({ character, level, score }) => {
 
     action("dangerous", (d) => {
         d.move(-ENEMY_SPEED, 0);
+    });
+
+    action("brick", (b) => {
+        b.move(ENEMY_SPEED, 0);
     });
 
     player.action(() => {
