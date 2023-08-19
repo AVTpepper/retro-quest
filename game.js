@@ -34,6 +34,8 @@ loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
 loadSprite('turtle', 'assets/images/turtle.png')
 loadSprite('fireball', 'assets/images/fireball.png')
 loadSprite('fireflower', 'assets/images/fire-flower.png')
+loadSprite('flagcastle', 'assets/images/img40x40/flag-castle-lg.png')
+loadSprite('goldblock', 'assets/images/img20x20/gold-block.png')
 
 //new enemies
 loadSprite('fly-guy', 'assets/images/img20x20/fly-guy.png')
@@ -159,6 +161,36 @@ scene("game", ({ character, level, score }) => {
     const maps = [
         //Test level for new items
         [
+            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££',
+            '£                                                                                                         ',
+            '£                                                                                                         ',
+            '£                                                                                                         ',
+            '£           %=%    $$$$$                                                                                  ',
+            '£                > =====                                                                                  ',
+            '£                               -+             =*=                                                        ',
+            '£            =====           -+ ()                   ===              @@@=*=%=            =%%=            ',
+            '£       ======            -+ () ()      =%%=        ====                            -+           -+     y ',
+            '£                  ^      () () ()           ^     =====                     ^  ^   ()           ()        ',                                                                                                                      
+            '£================================================================   ====================  ================',
+
+        ],
+        [
+            '=                                                                                                         ',
+            '=                                                                                                         ',
+            '=                   $$                                                                                    ',
+            '=                  $xx                                                                                    ',
+            '=                 $xxx                                                                                    ',
+            '=                 xxxx  =*=*=                                                                             ',
+            '=                xxxxx           =*=*=                                                                    ',
+            '=       =*=@=   xxxxxx                                        }                                           ',
+            '=              xxxxxxx ====      %%%        -+           =%%=                                             ',
+            '=             xxxxxxxx                      ()                               x                         -+ ',
+            '=      z   z xxxxxxxxx                      ()()  ^    ^                                              () ',
+            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££',
+            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££',
+        
+          ],
+        [
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
@@ -261,6 +293,8 @@ scene("game", ({ character, level, score }) => {
         'e': [sprite('koopa-green'), solid(), 'dangerous'],
         'r': [sprite('shy-guy'), solid(), 'dangerous'],
         't': [sprite('wild-piranha'), solid(), 'dangerous'],
+        'y': [sprite('flagcastle'), solid()],
+        'u': [sprite('goldblock'), solid()],
     }
 
     const gameLevel = addLevel(maps[level], levelCfg)
