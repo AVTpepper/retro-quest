@@ -86,7 +86,8 @@ scene("characterSelect", () => {
     add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
     add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
     add([text("Left and right arrows: Move character left and right", 8), origin('center'), pos(width() / 2, (height() / 2) + 100)])
-    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
+    add([text("Down arrow: Use a pipe to move to the next level", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
+    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 140)])
 
     let selectedCharacter = 0
 
@@ -167,7 +168,7 @@ scene("game", ({ character, level, score }) => {
             '£                               -+             =*=                                                        ',
             '£            =====           -+ ()                   ===              @@@=*=%=            =%%=            ',
             '£       ======            -+ () ()      =%%=        ====                            -+           -+     y ',
-            '£                  ^      () () ()           ^     =====                     ^  ^   ()           ()        ',
+            '£    f             ^      () () ()           ^     =====                     ^  ^   ()           ()       ',
             '£================================================================   ====================  ================',
 
         ],
@@ -272,7 +273,7 @@ scene("game", ({ character, level, score }) => {
         ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
         '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
         '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
-        '^': [sprite('evil-shroom'), solid(), 'dangerous'],
+        '^': [sprite('evil-shroom'), solid(), 'dangerous', body()],
         '#': [sprite('mushroom'), solid(), 'mushroom', body()],
         '!': [sprite('blue-block'), solid(), scale(0.5)],
         '£': [sprite('blue-brick'), solid(), scale(0.5)],
@@ -377,24 +378,26 @@ scene("game", ({ character, level, score }) => {
 
     function firePower() {
         let timer = 0
-        let hasFire = true
+        let hasFire = false
         return {
             update() {
                 if (hasFire) {
                     keyPress('f', () => {
-                        spawnFireball(player.pos.sub(1, 0))
+                        spawnFireball(player.pos.sub(-10, 10))
                     })
                     action('fireball', (f) => {
                         f.move(MOVE_SPEED, 0)
                     })
-                    // wait(10, () => {
-                    //     this.noFire()
-                    // })
-                    timer -= dt()
-                    if (timer <= 0) {
-                        this.noFire()
+                    while (timer > 0) {
+                        timer -= 1
+                        if (timer <= 0) {
+                            this.noFire()
+                        }
                     }
                 }
+            },
+            hasFire() {
+                return hasFire
             },
             noFire() {
                 timer = 0
@@ -538,21 +541,21 @@ scene("game", ({ character, level, score }) => {
 
     player.action(() => {
         if (player.grounded()) {
-        isJumping = false;
-        if (keyIsDown("left")) {
-            player.move(-CURRENT_MOVE_SPEED, 0);
-            player.scale.x = -1; // Flip the sprite horizontally
-        } else if (keyIsDown("right")) {
-            player.move(CURRENT_MOVE_SPEED, 0);
-            player.scale.x = 1; // Reset the sprite to its original orientation
-        }
+            isJumping = false;
+            if (keyIsDown("left")) {
+                player.move(-CURRENT_MOVE_SPEED, 0);
+                player.scale.x = -1; // Flip the sprite horizontally
+            } else if (keyIsDown("right")) {
+                player.move(CURRENT_MOVE_SPEED, 0);
+                player.scale.x = 1; // Reset the sprite to its original orientation
+            }
         }
     });
 
     keyPress("space", () => {
         if (player.grounded()) {
-        isJumping = true;
-        player.jump(CURRENT_JUMP_FORCE);
+            isJumping = true;
+            player.jump(CURRENT_JUMP_FORCE);
         }
     });
 
