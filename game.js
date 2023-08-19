@@ -28,6 +28,10 @@ loadSprite("background", "assets/images/background.png");
 loadSprite("background1", "assets/images/background.png");
 loadSprite("background2", "assets/images/background2.png");
 loadSprite("background3", "assets/images/background3.png");
+loadSprite("background4", "assets/images/background4.png");
+loadSprite("background6", "assets/images/background6.png");
+loadSprite("background7", "assets/images/background7.png");
+loadSprite("background8", "assets/images/background8.png");
 
 loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
@@ -80,7 +84,7 @@ scene("characterSelect", () => {
     layers(["bg", "obj", "ui"], "obj");
 
     add([
-        sprite('background'),
+        sprite("background"),
         layer('bg'),
         origin('center'),
         pos(width() / 2, height() / 4),
@@ -143,6 +147,7 @@ scene("characterSelect", () => {
 scene("game", ({ character, level, score }) => {
     layers(["bg", "obj", "ui"], "obj");
 
+
     let backgroundSprite;
     switch (level) {
         case 0:
@@ -154,11 +159,40 @@ scene("game", ({ character, level, score }) => {
         case 2:
             backgroundSprite = "background3";
             break;
+        case 3:
+            backgroundSprite = "background3";
+            break;
+        case 4:
+            backgroundSprite = "background3";
+            break;
+        case 5:
+            backgroundSprite = "background3";
+            break;
+        case 6:
+            backgroundSprite = "background3";
+            break;
+        case 7:
+            backgroundSprite = "background3";
+            break;
+
+
         default:
             backgroundSprite = "background1";
     }
+    add([
+        sprite(backgroundSprite),
+        layer("bg"),
+        pos(0, 0),
+        scale(1.9, .495)
+    ]);
 
 
+    // add([
+    //     sprite("background"),
+    //     layer('bg'),
+    //     origin('center'),
+    //     pos(width() / 2, height() / 4),
+    //     scale(1.9, .495)
 
     const maps = [
         //Test level for new items
