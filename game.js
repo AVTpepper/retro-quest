@@ -411,7 +411,11 @@ scene("game", ({ character, level, score }) => {
             gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
         if (obj.is('dangerous')) {
-            go('lose', {
+            if (player.isBig) {
+                destroy(obj)
+                player.smallify()
+            } else
+                go('lose', {
                 score: scoreLabel.text
             })
         }
@@ -464,6 +468,9 @@ scene("game", ({ character, level, score }) => {
     player.collides('dangerous', (d) => {
         if (isJumping || isInvincible) {
             destroy(d)
+        } else if (player.isBig) {
+            destroy(d)
+            player.smallify()
         } else {
             go('lose', {
                 score: scoreLabel.text
