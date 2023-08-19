@@ -22,6 +22,7 @@ const ENEMY_SPEED = 20
 let isJumping = true
 let isInvincible = false
 
+loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite('background', '/assets/images/background.png')
 loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
@@ -32,11 +33,11 @@ loadSprite('turtle', 'assets/images/turtle.png')
 
 
 loadRoot('https://i.imgur.com/')
+// loadSprite('mario', 'Wb1qfhK.png')
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
 loadSprite('brick', 'pogC9x5.png')
 loadSprite('block', 'M6rwarW.png')
-loadSprite('mario', 'Wb1qfhK.png')
 loadSprite('mushroom', '0wMd92p.png')
 loadSprite('surprise', 'gesQ1KP.png')
 loadSprite('unboxed', 'bdrLpi6.png')
@@ -232,7 +233,8 @@ scene("game", ({ level, score }) => {
     }
 
     const player = add([
-        sprite('mario'), solid(),
+        sprite('mario'),
+        solid(),
         pos(30, 0),
         body(),
         big(),
@@ -316,10 +318,12 @@ scene("game", ({ level, score }) => {
 
     keyDown('right', () => {
         player.move(CURRENT_MOVE_SPEED, 0)
+        player.flipX = false
     })
 
     keyDown('left', () => {
         player.move(-CURRENT_MOVE_SPEED, 0)
+        player.flipX = true
     })
 
     player.action(() => {
@@ -341,12 +345,6 @@ scene("game", ({ level, score }) => {
         }
     })
 
-    keyPress('space', () => {
-        if (player.grounded()) {
-            isJumping = true
-            player.jump(CURRENT_JUMP_FORCE)
-        }
-    })
 })
 
 scene('lose', ({ score }) => {
