@@ -24,10 +24,10 @@ let isInvincible = false
 let hasFire = false
 
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
-loadSprite('background', '/assets/images/background.png')
-loadSprite('background1', '/assets/images/background.png')
-loadSprite('background2', '/assets/images/background2.png')
-loadSprite('background3', '/assets/images/background3.png')
+loadSprite('background', 'assets/images/background.png')
+loadSprite('background1', 'assets/images/background.png')
+loadSprite('background2', 'assets/images/background2.png')
+loadSprite('background3', 'assets/images/background3.png')
 
 loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
@@ -189,7 +189,7 @@ scene("game", ({ character, level, score }) => {
             '£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £',
             '£                          x x x     =*=%=                                                             £',
             '£                        x x x x  x                                                                  -+£',
-            '£            &     & z  x x x x x  x                      &   &            &  z       &           & ()£',
+            '£            &     & z  x x x x x  x                      &   &            &  z       &           &  ()£',
             '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
         ],
         /* level by q 
@@ -206,8 +206,8 @@ scene("game", ({ character, level, score }) => {
             '               =======                                   %%%%%         ^                                            ',
             '                                                                 =======                           ^                ',
             '          ====          =%%%%%=                                =========        *         ==========                ',
-            '                                            ^                ===========                               $$           ',
-            '=========         ^             ^        ======            =============                             ======         ',
+            '                                            ^                ===========                               $$       -+  ',
+            '=========         ^             ^        ======            =============                             ======     ()  ',
             '           ========  ====================      ======  ==================   =======                          =======',
         ],
         // level design by james
