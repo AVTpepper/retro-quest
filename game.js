@@ -23,6 +23,13 @@ let isJumping = true
 // let isInvincible = false
 // let hasFire = true
 
+
+//music
+loadSound("sound1", "assets/arcade-sounds/sound1.mp3")
+loadSound("sound2", "assets/arcade-sounds/sound2.mp3")
+loadSound("sound3", "assets/arcade-sounds/sound3.mp3")
+
+
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite("background", "assets/images/background.png");
 loadSprite("background1", "assets/images/background.png");
@@ -146,18 +153,24 @@ scene("characterSelect", () => {
 
 scene("game", ({ character, level, score }) => {
     layers(["bg", "obj", "ui"], "obj");
-
+    let bgMusic;
 
     let backgroundSprite;
     switch (level) {
         case 0:
             backgroundSprite = "background1";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound1", {loop: true, volume: 0.7})
             break;
         case 1:
             backgroundSprite = "background2";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound2", {loop: true, volume: 0.7})
             break;
         case 2:
             backgroundSprite = "background3";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound3", {loop: true, volume: 0.7})
             break;
         case 3:
             backgroundSprite = "background3";
