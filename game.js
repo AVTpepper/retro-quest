@@ -83,6 +83,7 @@ scene('characterSelect', () => {
         scale(1.9, .495)
     ])
 
+    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 40)])
 
     let selectedCharacter = 0
 
