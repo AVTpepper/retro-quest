@@ -44,13 +44,17 @@ loadSprite("koopa-green", "assets/images/img20x20/koopa-green.png");
 loadSprite("shy-guy", "assets/images/img20x20/shy-guy.png");
 loadSprite("wild-piranha", "assets/images/img20x20/wild-piranha.png");
 
-//main character
-loadRoot("https://i.imgur.com/");
-loadSprite("mario", "Wb1qfhK.png");
-loadSprite("luigi", "pogC9x5.png");
-loadSprite("peach", "KPO3fR9.png");
-loadSprite("donkey-kong", "bdrLpi6.png");
 
+//main character
+
+loadSprite("mario", "assets/images/img20x20/mario-b.png");
+loadSprite("luigi", "assets/images/img20x20/luigi.png");
+loadSprite("peach", "assets/images/img20x20/peach.png");
+loadSprite("donkey-kong", "assets/images/img20x20/donkey-kong.png");
+loadSprite("ci-logo", "assets/images/img20x20/ci-logo.png");
+
+
+loadRoot("https://i.imgur.com/");
 loadSprite("coin", "wbKxhcd.png");
 loadSprite("evil-shroom", "KPO3fR9.png");
 loadSprite("brick", "pogC9x5.png");
@@ -70,7 +74,7 @@ loadSprite('blue-evil-shroom', 'SvV4ueD.png')
 loadSprite('blue-surprise', 'RMqCc1G.png')
 
 // selection screen
-const characters = ["mario", "luigi", "peach", "donkey-kong"];
+const characters = ["mario", "luigi", "peach", "donkey-kong", "ci-logo"];
 
 scene("characterSelect", () => {
     layers(["bg", "obj", "ui"], "obj");
