@@ -19,9 +19,9 @@ const ENEMY_SPEED = 20;
 
 // Game logic
 
-let isJumping = true;
-let isInvincible = false;
-let hasFire = false;
+let isJumping = true
+let isInvincible = false
+// let hasFire = true
 
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite("background", "assets/images/background.png");
@@ -142,45 +142,45 @@ scene("game", ({ character, level, score }) => {
 
 
 
-  const maps = [
-    //Test level for new items
-    [
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "    %   <=*=%=                        %=*=%=                                                       % ",
-      "                     w                                                            w                  ",
-      "                            -+                                     -+                         -+     ",
-      "             q              ()   e              rr       t     ^  ()                          ()     ",
-      "=================  ==========================  ======  ==================   =============== =========",
-    ],
-    [
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "       <=*=%=                        %=*=%=                                                        % ",
-      "    g                                                                                                ",
-      "                            -+                                     -+                         -+     ",
-      "            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ",
-      "=================  ==========================  ======  ==================   =============== =========",
-    ],
-    [
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £",
-      "£                          x x x     =*=%=                                                             £",
-      "£                        x x x x  x                                                                  -+£",
-      "£            &     & z  x x x x x  x                      &   &            &  z       &           &  ()£",
-      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ",
-    ],
-    /* level by q 
+    const maps = [
+        //Test level for new items
+        [
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '    %   <=*=%=                        %=*=%=                                                       % ',
+            '                     w                                                            w                  ',
+            '   g                        -+                                    -+                          -+     ',
+            '             q              ()   e              rr       t     ^  ()                          ()     ',
+            '=================  ==========================  ======  ==================   =============== =========',
+        ],
+        [
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '       <=*=%=                        %=*=%=                                                        % ',
+            '    g                                                                                                ',
+            '                            -+                                     -+                         -+     ',
+            '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
+            '=================  ==========================  ======  ==================   =============== =========',
+        ],
+        [
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£                                                                                                      £',
+            '£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £',
+            '£                          x x x     =*=%=                                                             £',
+            '£                        x x x x  x                                                                  -+£',
+            '£            &     & z  x x x x x  x                      &   &            &  z       &           &  ()£',
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
+        ],
+        /* level by q 
         /* level by q
     problems: evil shrooms don't fall; evil shrooms should move back and forth
     requires: mushroom to also increase jump force
@@ -252,16 +252,16 @@ scene("game", ({ character, level, score }) => {
 
   const gameLevel = addLevel(maps[level], levelCfg);
 
-  const scoreLabel = add([
-    text(score),
-    pos(30, 6),
-    layer("ui"),
-    {
-      value: score,
-    },
-  ]);
+    const scoreLabel = add([
+        pos(100, 6),
+        layer('ui'),
+        {
+            value: score,
+        },
+        text("Score: " + score),
+    ])
 
-  add([text("level " + parseInt(level + 1)), pos(40, 6)]);
+    add([text('level ' + parseInt(level + 1)), pos(30, 6)])
 
   // power-up functions
   function big() {
@@ -329,33 +329,37 @@ scene("game", ({ character, level, score }) => {
     });
   }
 
-  function firePower() {
-    let timer = 0;
-    return {
-      update() {
-        if (hasFire) {
-          keyPress("f", () => {
-            spawnFireball(player.pos.sub(1, 0));
-          });
-          action("fireball", (f) => {
-            f.move(MOVE_SPEED, 0);
-          });
-          timer -= dt();
-          if (timer <= 0) {
-            this.noFire();
-          }
+    function firePower() {
+        let timer = 0
+        let hasFire = true
+        return {
+            update() {
+                if(hasFire) {
+                    keyPress('f', () => {
+                        spawnFireball(player.pos.sub(1, 0))
+                    })
+                    action('fireball', (f) => {
+                        f.move(MOVE_SPEED, 0)
+                    })
+                    // wait(10, () => {
+                    //     this.noFire()
+                    // })
+                    timer -= dt()
+                    if (timer <= 0) {
+                        this.noFire()
+                    }
+                }    
+            },
+            noFire() {
+                timer = 0
+                hasFire = false
+            },
+            fireUp(time) {
+                timer = time
+                hasFire = true
+            }
         }
-      },
-      noFire() {
-        hasFire = false;
-        timer = 0;
-      },
-      fireUp(time) {
-        timer = time;
-        hasFire = true;
-      },
-    };
-  }
+    }
 
   const player = add([
     sprite(character),
@@ -402,34 +406,34 @@ scene("game", ({ character, level, score }) => {
     player.biggify(6);
   });
 
-  player.collides("coin", (c) => {
-    destroy(c);
-    scoreLabel.value++;
-    scoreLabel.text = scoreLabel.value;
-  });
+    player.collides('coin', (c) => {
+        destroy(c)
+        scoreLabel.value++
+        scoreLabel.text = "Score: " + scoreLabel.value
+    })
 
   player.collides("star", (s) => {
     destroy(s);
     player.starUp(6);
   });
 
-  player.collides("fireflower", (f) => {
-    destroy(f);
-    player.fireUp(6);
-  });
+    player.collides('fireflower', (g) => {
+        destroy(g)
+        player.fireUp(6)
+    })
 
   action("dangerous", (d) => {
     d.move(-ENEMY_SPEED, 0);
   });
 
-  player.action(() => {
-    camPos(player.pos);
-    if (player.pos.y >= FALL_DEATH) {
-      go("lose", {
-        score: scoreLabel.value,
-      });
-    }
-  });
+    player.action(() => {
+        camPos(player.pos)
+        if (player.pos.y >= FALL_DEATH) {
+            go('lose', {
+                score: scoreLabel.text
+            })
+        }
+    })
 
   player.collides("pipe", () => {
     keyPress("down", () => {
@@ -441,15 +445,15 @@ scene("game", ({ character, level, score }) => {
     });
   });
 
-  player.collides("dangerous", (d) => {
-    if (isJumping || isInvincible) {
-      destroy(d);
-    } else {
-      go("lose", {
-        score: scoreLabel.value,
-      });
-    }
-  });
+    player.collides('dangerous', (d) => {
+        if (isJumping || isInvincible) {
+            destroy(d)
+        } else {
+            go('lose', {
+                score: scoreLabel.text
+            })
+        }
+    });
 
   action("turtle", (t) => {
     t.move(-ENEMY_SPEED, 0);
@@ -492,9 +496,13 @@ scene("game", ({ character, level, score }) => {
   // });
 });
 
-scene("lose", ({ score }) => {
-  add([text(score, 32), origin("center"), pos(width() / 2, height() / 2)]);
-});
+scene('lose', ({ score }) => {
+    add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
+    add([text("Press 'space' to restart the game!", 16), origin('center'), pos(width() / 2, (height() / 2) + 40)])
+    keyPress('space', () => {
+        go("characterSelect")
+    })
+})
 
 start("characterSelect");
 
