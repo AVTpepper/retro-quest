@@ -67,9 +67,6 @@ loadSprite('blue-steel', 'gqVoI2b.png')
 loadSprite('blue-evil-shroom', 'SvV4ueD.png')
 loadSprite('blue-surprise', 'RMqCc1G.png')
 
-
-
-
 // selection screen
 const characters = ['mario', 'luigi', 'peach', 'donkey-kong']
 
@@ -79,16 +76,21 @@ scene('characterSelect', () => {
     add([
         sprite('background'),
         layer('bg'),
-        pos(0, 0),
+        origin('center'),
+        pos(width() / 2, height() / 4),
         scale(1.9, .495)
     ])
 
+    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
+    add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
+    add([text("Left and right arrows: Move character left and right", 8), origin('center'), pos(width() / 2, (height() / 2) + 100)])
+    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
 
     let selectedCharacter = 0
 
     function drawCharacters() {
         characters.forEach((character, index) => {
-            const position = vec2(40 + index * 80, 100)
+            const position = vec2((width() / 3) + index * 80, 100)
             const spriteName = character
             const isSelected = index === selectedCharacter
             add([
@@ -505,7 +507,5 @@ scene('lose', ({ score }) => {
     })
 })
 
-
 start("characterSelect")
-
 // start("game", { level: 0, score: 0 })
