@@ -20,7 +20,7 @@ const ENEMY_SPEED = 20
 // Game logic
 
 let isJumping = true
-let isInvincible = false
+// let isInvincible = false
 // let hasFire = true
 
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
@@ -309,6 +309,7 @@ scene("game", ({ character, level, score }) => {
 
     function star() {
         let timer = 0
+        let isInvincible = false
         return {
             update() {
                 if(isInvincible) {
@@ -317,12 +318,15 @@ scene("game", ({ character, level, score }) => {
                     if (timer <= 0) {
                         this.noStar()
                     }
-                }    
+                }
             },
+            isInvincible() {
+                return isInvincible
+            }, 
             noStar() {
-                isInvincible = false
                 CURRENT_MOVE_SPEED = MOVE_SPEED
                 timer = 0
+                isInvincible = false
             },
             starUp(time) {
                 timer = time
@@ -411,9 +415,11 @@ scene("game", ({ character, level, score }) => {
             gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
         if (obj.is('dangerous')) {
-            if (player.isBig) {
+            if (player.isBig()) {
                 destroy(obj)
                 player.smallify()
+                scoreLabel.value++
+                scoreLabel.text = "Score: " + scoreLabel.value
             } else
                 go('lose', {
                 score: scoreLabel.text
@@ -466,11 +472,15 @@ scene("game", ({ character, level, score }) => {
     })
 
     player.collides('dangerous', (d) => {
-        if (isJumping || isInvincible) {
+        if (isJumping || player.isInvincible()) {
             destroy(d)
-        } else if (player.isBig) {
+            scoreLabel.value++
+            scoreLabel.text = "Score: " + scoreLabel.value
+        } else if (player.isBig()) {
             destroy(d)
             player.smallify()
+            scoreLabel.value++
+            scoreLabel.text = "Score: " + scoreLabel.value
         } else {
             go('lose', {
                 score: scoreLabel.text
@@ -488,12 +498,6 @@ scene("game", ({ character, level, score }) => {
 
     keyDown('left', () => {
         player.move(-CURRENT_MOVE_SPEED, 0)
-    })
-
-    player.action(() => {
-        if (player.grounded()) {
-            isJumping = false
-        }
     })
 
     keyPress('space', () => {
