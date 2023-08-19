@@ -21,7 +21,9 @@ const ENEMY_SPEED = 20
 
 let isJumping = true
 let isInvincible = false
+let hasFire = false
 
+// loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite('background', '/assets/images/background.png')
 loadSprite('background1', '/assets/images/background.png')
 loadSprite('background2', '/assets/images/background2.png')
@@ -30,6 +32,8 @@ loadSprite('background3', '/assets/images/background3.png')
 loadSprite('turtle', 'assets/images/turtle.png') // add turtle
 loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
 loadSprite('turtle', 'assets/images/turtle.png')
+loadSprite('fireball', 'assets/images/fireball.png')
+loadSprite('fireflower', 'assets/images/fire-flower.png')
 
 //new enemies
 loadSprite('fly-guy', 'assets/images/img20x20/fly-guy.png')
@@ -170,8 +174,8 @@ scene("game", ({ character, level, score }) => {
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
-            '    %   <=*=%=                        %=*=%=                                                       % ',
-            '                                                                                                     ',
+            '       <=*=%=                        %=*=%=                                                        % ',
+            '    g                                                                                                ',
             '                            -+                                     -+                         -+     ',
             '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
             '=================  ==========================  ======  ==================   =============== =========',
@@ -233,6 +237,7 @@ scene("game", ({ character, level, score }) => {
         '%': [sprite('surprise'), solid(), 'coin-surprise'],
         '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
         '<': [sprite('surprise'), solid(), 'star-surprise'],
+        'g': [sprite('surprise'), solid(), 'fire-surprise'],
         '}': [sprite('unboxed'), solid()],
         '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
         ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
@@ -247,8 +252,7 @@ scene("game", ({ character, level, score }) => {
         'x': [sprite('blue-steel'), solid(), scale(0.5)],
         '&': [sprite('turtle'), 'turtle', 'dangerous'],
         '>': [sprite('star'), 'star'],
-        
-
+        'f': [sprite('fireflower'), 'fireflower'],
         //new
         'q': [sprite('fly-guy'), solid(), 'dangerous'],
         'w': [sprite('goomba'), solid(), 'dangerous'],
@@ -325,13 +329,54 @@ scene("game", ({ character, level, score }) => {
         }
     }
 
+    function spawnFireball(p) {
+        const fireball = add([sprite('fireball'), pos(p), 'fireball'])
+        fireball.collides('dangerous', (d) => {
+            destroy(d)
+            destroy(fireball)
+        })
+        wait(1.5, () => {
+            destroy(fireball)
+        })
+    }
+
+    function firePower() {
+        let timer = 0
+        return {
+            update() {
+                if(hasFire) {
+                    keyPress('f', () => {
+                        spawnFireball(player.pos.sub(1, 0))
+                    })
+                    action('fireball', (f) => {
+                        f.move(MOVE_SPEED, 0)
+                    })
+                    timer -= dt()
+                    if (timer <= 0) {
+                        this.noFire()
+                    }
+                }    
+            },
+            noFire() {
+                hasFire = false
+                timer = 0
+            },
+            fireUp(time) {
+                timer = time
+                hasFire = true
+            }
+        }
+    }
+
     const player = add([
-        sprite(character), solid(),
+        sprite(character),
+        solid(),
         pos(30, 0),
         body(),
         big(),
         star(),
-        origin('bot'),
+        firePower(),
+        // origin(bot)
     ])
 
     action('mushroom', (m) => {
@@ -354,6 +399,11 @@ scene("game", ({ character, level, score }) => {
             destroy(obj)
             gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
+        if (obj.is('fire-surprise')) {
+            gameLevel.spawn('f', obj.gridPos.sub(0, 1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        }
     })
 
     player.collides('mushroom', (m) => {
@@ -370,6 +420,11 @@ scene("game", ({ character, level, score }) => {
     player.collides('star', (s) => {
         destroy(s)
         player.starUp(6)
+    })
+
+    player.collides('fireflower', (f) => {
+        destroy(f)
+        player.fireUp(6)
     })
 
     action('dangerous', (d) => {
@@ -436,12 +491,6 @@ scene("game", ({ character, level, score }) => {
         }
     })
 
-    keyPress('space', () => {
-        if (player.grounded()) {
-            isJumping = true
-            player.jump(CURRENT_JUMP_FORCE)
-        }
-    })
 })
 
 scene('lose', ({ score }) => {
