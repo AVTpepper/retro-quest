@@ -410,6 +410,11 @@ scene("game", ({ character, level, score }) => {
             destroy(obj)
             gameLevel.spawn('}', obj.gridPos.sub(0, 0))
         }
+        if (obj.is('dangerous')) {
+            go('lose', {
+                score: scoreLabel.text
+            })
+        }
     })
 
     player.collides('mushroom', (m) => {
