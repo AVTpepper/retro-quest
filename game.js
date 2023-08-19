@@ -32,11 +32,15 @@ loadSprite('turtle', 'assets/images/turtle.png')
 
 
 loadRoot('https://i.imgur.com/')
+loadSprite('mario', 'Wb1qfhK.png')
+loadSprite('luigi', 'pogC9x5.png')
+loadSprite('peach', 'KPO3fR9.png')
+loadSprite('donkey-kong', 'bdrLpi6.png')
+
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('evil-shroom', 'KPO3fR9.png')
 loadSprite('brick', 'pogC9x5.png')
 loadSprite('block', 'M6rwarW.png')
-loadSprite('mario', 'Wb1qfhK.png')
 loadSprite('mushroom', '0wMd92p.png')
 loadSprite('surprise', 'gesQ1KP.png')
 loadSprite('unboxed', 'bdrLpi6.png')
@@ -53,7 +57,66 @@ loadSprite('blue-surprise', 'RMqCc1G.png')
 
 
 
-scene("game", ({ level, score }) => {
+
+// selection screen
+const characters = ['mario', 'luigi', 'peach', 'donkey-kong']
+
+scene('characterSelect', () => {
+    layers(['bg', 'obj', 'ui'], 'obj')
+
+    add([
+        sprite('background'),
+        layer('bg'),
+        pos(0, 0),
+        scale(1.9, .495)
+    ])
+
+
+    let selectedCharacter = 0
+
+    function drawCharacters() {
+        characters.forEach((character, index) => {
+            const position = vec2(40 + index * 80, 100)
+            const spriteName = character
+            const isSelected = index === selectedCharacter
+            add([
+                sprite(spriteName),
+                pos(position),
+                scale(isSelected ? 1.5 : 1),
+                'character',
+                {
+                    characterName: character
+                }
+            ])
+        })
+    }
+
+    drawCharacters()
+
+    keyPress('right', () => {
+        selectedCharacter = (selectedCharacter + 1) % characters.length
+        destroyAll('character')
+        drawCharacters()
+    })
+
+    keyPress('left', () => {
+        selectedCharacter = (selectedCharacter - 1 + characters.length) % characters.length
+        destroyAll('character')
+        drawCharacters()
+    })
+
+    keyPress('space', () => {
+        go('game', {
+            character: characters[selectedCharacter],
+            level: 0,
+            score: 0
+        })
+    })
+})
+
+
+
+scene("game", ({ character, level, score }) => {
     layers(['bg', 'obj', 'ui'], 'obj')
 
     let backgroundSprite;
@@ -86,7 +149,7 @@ scene("game", ({ level, score }) => {
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
-            '    %   ==*=%=                        %=*=%=                                                        % ',
+            '    %   <=*=%=                        %=*=%=                                                        % ',
             '                                                                                                     ',
             '                            -+                                     -+                         -+     ',
             '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
@@ -232,7 +295,7 @@ scene("game", ({ level, score }) => {
     }
 
     const player = add([
-        sprite('mario'), solid(),
+        sprite(character), solid(),
         pos(30, 0),
         body(),
         big(),
@@ -294,6 +357,7 @@ scene("game", ({ level, score }) => {
     player.collides('pipe', () => {
         keyPress('down', () => {
             go('game', {
+                character: character,
                 level: (level + 1) % maps.length,
                 score: scoreLabel.value
             })
@@ -353,4 +417,7 @@ scene('lose', ({ score }) => {
     add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
 })
 
-start("game", { level: 0, score: 0 })
+
+start("characterSelect")
+
+// start("game", { level: 0, score: 0 })
