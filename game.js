@@ -29,11 +29,13 @@ loadSprite("background1", "assets/images/background.png");
 loadSprite("background2", "assets/images/background2.png");
 loadSprite("background3", "assets/images/background3.png");
 
-loadSprite("turtle", "assets/images/turtle.png"); // add turtle
-loadSprite("star", "assets/images/starsprite.png"); // temp star sprite
-loadSprite("turtle", "assets/images/turtle.png");
-loadSprite("fireball", "assets/images/fireball.png");
-loadSprite("fireflower", "assets/images/fire-flower.png");
+loadSprite('turtle', 'assets/images/turtle.png') // add turtle
+loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
+loadSprite('turtle', 'assets/images/turtle.png')
+loadSprite('fireball', 'assets/images/fireball.png')
+loadSprite('fireflower', 'assets/images/fire-flower.png')
+loadSprite('flagcastle', 'assets/images/img40x40/flag-castle-lg.png')
+loadSprite('goldblock', 'assets/images/img20x20/gold-block.png')
 
 //new enemies
 loadSprite("fly-guy", "assets/images/img20x20/fly-guy.png");
@@ -156,6 +158,36 @@ scene("game", ({ character, level, score }) => {
     const maps = [
         //Test level for new items
         [
+            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££',
+            '£                                                                                                         ',
+            '£                                                                                                         ',
+            '£                                                                                                         ',
+            '£           %=%    $$$$$                                                                                  ',
+            '£                > =====                                                                                  ',
+            '£                               -+             =*=                                                        ',
+            '£            =====           -+ ()                   ===              @@@=*=%=            =%%=            ',
+            '£       ======            -+ () ()      =%%=        ====                            -+           -+     y ',
+            '£                  ^      () () ()           ^     =====                     ^  ^   ()           ()        ',                                                                                                                      
+            '£================================================================   ====================  ================',
+
+        ],
+        [
+            '=                                                                                                         ',
+            '=                                                                                                         ',
+            '=                   $$                                                                                    ',
+            '=                  $xx                                                                                    ',
+            '=                 $xxx                                                                                    ',
+            '=                 xxxx  =*=*=                                                                             ',
+            '=                xxxxx           =*=*=                                                                    ',
+            '=       =*=@=   xxxxxx                                        }                                           ',
+            '=              xxxxxxx ====      %%%        -+           =%%=                                             ',
+            '=             xxxxxxxx                      ()                               x                         -+ ',
+            '=      z   z xxxxxxxxx                      ()()  ^    ^                                              () ',
+            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££',
+            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££',
+        
+          ],
+        [
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
@@ -226,42 +258,41 @@ scene("game", ({ character, level, score }) => {
     ],
   ];
 
-  const levelCfg = {
-    width: 20,
-    height: 20,
-    "=": [sprite("block"), solid()],
-    $: [sprite("coin"), "coin"],
-    "%": [sprite("surprise"), solid(), "coin-surprise"],
-    "*": [sprite("surprise"), solid(), "mushroom-surprise"],
-    "<": [sprite("surprise"), solid(), "star-surprise"],
-    g: [sprite("surprise"), solid(), "fire-surprise"],
-    "}": [sprite("unboxed"), solid()],
-    "(": [sprite("pipe-bottom-left"), solid(), scale(0.5)],
-    ")": [sprite("pipe-bottom-right"), solid(), scale(0.5)],
-    "-": [sprite("pipe-top-left"), solid(), scale(0.5), "pipe"],
-    "+": [sprite("pipe-top-right"), solid(), scale(0.5), "pipe"],
-    "^": [sprite("evil-shroom"), solid(), "dangerous"],
-    "#": [sprite("mushroom"), solid(), "mushroom", body()],
-    "!": [sprite("blue-block"), solid(), scale(0.5)],
-    "£": [sprite("blue-brick"), solid(), scale(0.5)],
-    z: [sprite("blue-evil-shroom"), solid(), scale(0.5), "dangerous"],
-    "@": [sprite("blue-surprise"), solid(), scale(0.5), "coin-surprise"],
-    x: [sprite("blue-steel"), solid(), scale(0.5)],
-    "&": [sprite("turtle"), "turtle", "dangerous"],
-    ">": [sprite("star"), "star"],
-    f: [sprite("fireflower"), "fireflower"],
-    //new
-    q: [sprite("fly-guy"), solid(), "dangerous"],
-    w: [sprite("goomba"), solid(), "dangerous"],
-    e: [sprite("koopa-green"), solid(), "dangerous"],
-    r: [sprite("shy-guy"), solid(), "dangerous"],
-    t: [sprite("wild-piranha"), solid(), "dangerous"],
-  };
+    const levelCfg = {
+        width: 20,
+        height: 20,
+        '=': [sprite('block'), solid()],
+        '$': [sprite('coin'), 'coin'],
+        '%': [sprite('surprise'), solid(), 'coin-surprise'],
+        '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
+        '<': [sprite('surprise'), solid(), 'star-surprise'],
+        'g': [sprite('surprise'), solid(), 'fire-surprise'],
+        '}': [sprite('unboxed'), solid()],
+        '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
+        ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
+        '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
+        '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
+        '^': [sprite('evil-shroom'), solid(), 'dangerous'],
+        '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+        '!': [sprite('blue-block'), solid(), scale(0.5)],
+        '£': [sprite('blue-brick'), solid(), scale(0.5)],
+        'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
+        '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
+        'x': [sprite('blue-steel'), solid(), scale(0.5)],
+        '&': [sprite('turtle'), 'turtle', 'dangerous'],
+        '>': [sprite('star'), 'star'],
+        'f': [sprite('fireflower'), 'fireflower'],
+        //new
+        'q': [sprite('fly-guy'), solid(), 'dangerous'],
+        'w': [sprite('goomba'), solid(), 'dangerous'],
+        'e': [sprite('koopa-green'), solid(), 'dangerous'],
+        'r': [sprite('shy-guy'), solid(), 'dangerous'],
+        't': [sprite('wild-piranha'), solid(), 'dangerous'],
+        'y': [sprite('flagcastle'), solid()],
+        'u': [sprite('goldblock'), solid()],
+    }
 
- 
-
-
-  const gameLevel = addLevel(maps[level], levelCfg);
+    const gameLevel = addLevel(maps[level], levelCfg)
 
     const scoreLabel = add([
         pos(100, 6),
