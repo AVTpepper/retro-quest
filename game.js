@@ -23,14 +23,22 @@ let isJumping = true
 let isInvincible = false
 
 loadSprite('background', '/assets/images/background.png')
-loadSprite('turtle', 'assets/images/turtle.png') // add turtle
-loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
 loadSprite('background1', '/assets/images/background.png')
 loadSprite('background2', '/assets/images/background2.png')
 loadSprite('background3', '/assets/images/background3.png')
+
+loadSprite('turtle', 'assets/images/turtle.png') // add turtle
+loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
 loadSprite('turtle', 'assets/images/turtle.png')
 
+//new enemies
+loadSprite('fly-guy', 'assets/images/img20x20/fly-guy.png')
+loadSprite('goomba', 'assets/images/img20x20/goomba.png')
+loadSprite('koopa-green', 'assets/images/img20x20/koopa-green.png')
+loadSprite('shy-guy', 'assets/images/img20x20/shy-guy.png')
+loadSprite('wild-piranha', 'assets/images/img20x20/wild-piranha.png')
 
+//main character
 loadRoot('https://i.imgur.com/')
 loadSprite('mario', 'Wb1qfhK.png')
 loadSprite('luigi', 'pogC9x5.png')
@@ -143,13 +151,26 @@ scene("game", ({ character, level, score }) => {
     ])
 
     const maps = [
+        //Test level for new items
         [
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
             '                                                                                                     ',
-            '    %   <=*=%=                        %=*=%=                                                        % ',
+            '    %   <=*=%=                        %=*=%=                                                       % ',
+            '                     w                                                            w                  ',
+            '                            -+                                     -+                         -+     ',
+            '             q              ()   e              rr       t     ^  ()                          ()     ',
+            '=================  ==========================  ======  ==================   =============== =========',
+        ],
+        [
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '                                                                                                     ',
+            '    %   <=*=%=                        %=*=%=                                                       % ',
             '                                                                                                     ',
             '                            -+                                     -+                         -+     ',
             '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
@@ -183,7 +204,7 @@ scene("game", ({ character, level, score }) => {
             '          ====          =%%%%%=                                =========        *         ==========                ',
             '                                            ^                ===========                               $$           ',
             '=========         ^             ^        ======            =============                             ======         ',
-            '           ========  ====================      ======  ==================   =====                            =======',
+            '           ========  ====================      ======  ==================   =======                          =======',
         ],
         // level design by james
         [
@@ -201,6 +222,8 @@ scene("game", ({ character, level, score }) => {
             '==========================    ==============================         ===============================================',
         ],
     ]
+
+
 
     const levelCfg = {
         width: 20,
@@ -224,6 +247,14 @@ scene("game", ({ character, level, score }) => {
         'x': [sprite('blue-steel'), solid(), scale(0.5)],
         '&': [sprite('turtle'), 'turtle', 'dangerous'],
         '>': [sprite('star'), 'star'],
+        
+
+        //new
+        'q': [sprite('fly-guy'), solid(), 'dangerous'],
+        'w': [sprite('goomba'), solid(), 'dangerous'],
+        'e': [sprite('koopa-green'), solid(), 'dangerous'],
+        'r': [sprite('shy-guy'), solid(), 'dangerous'],
+        't': [sprite('wild-piranha'), solid(), 'dangerous'],
     }
 
     const gameLevel = addLevel(maps[level], levelCfg)
