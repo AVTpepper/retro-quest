@@ -21,7 +21,7 @@ const ENEMY_SPEED = 20
 
 let isJumping = true
 let isInvincible = false
-let hasFire = true
+let hasFire = false
 
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite('background', '/assets/images/background.png')
