@@ -81,7 +81,10 @@ scene('characterSelect', () => {
         scale(1.9, .495)
     ])
 
-    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 40)])
+    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
+    add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
+    add([text("Left and right arrows: Move character left and right", 8), origin('center'), pos(width() / 2, (height() / 2) + 100)])
+    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
 
     let selectedCharacter = 0
 
