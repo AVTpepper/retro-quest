@@ -615,4 +615,4 @@ scene("lose", ({ score }) => {
 });
 
 start("characterSelect");
-// start("game", { level: 0, score: 0 })
+
