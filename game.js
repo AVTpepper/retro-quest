@@ -58,7 +58,7 @@ const JUMP_FORCE = 360;
 const BIG_JUMP_FORCE = 550;
 let CURRENT_JUMP_FORCE = JUMP_FORCE;
 let CURRENT_MOVE_SPEED = MOVE_SPEED;
-const FALL_DEATH = 400;
+let FALL_DEATH = 400;
 const ENEMY_SPEED = 20;
 
 // Game logic
@@ -77,9 +77,12 @@ loadSprite("background6", "assets/images/background6.png");
 loadSprite("background7", "assets/images/background7.png");
 loadSprite("background8", "assets/images/background8.png");
 loadSprite("background9", "assets/images/background9.png");
+loadSprite("background10", "assets/images/background10.png");
+loadSprite("background11", "assets/images/background11.png");
+loadSprite("black-background", "assets/images/black-blackground.png");
 
 loadSprite("turtle", "assets/images/turtle.png"); // add turtle
-loadSprite("star", "assets/images/starsprite.png"); // temp star sprite
+loadSprite("star", "assets/images/img20x20/star.png"); // temp star sprite
 loadSprite("turtle", "assets/images/turtle.png");
 loadSprite("fireball", "assets/images/fireball.png");
 loadSprite("fireflower", "assets/images/fire-flower.png");
@@ -242,7 +245,7 @@ scene("game", ({ character, level, score }) => {
         bgMusic.stop();
       }
       bgMusic = play("sound2", { loop: true, volume: currentVolume });
-      backgroundSprite = "background7";
+      backgroundSprite = "black-background";
       break;
     case 5:
       if (bgMusic) {
@@ -270,7 +273,7 @@ scene("game", ({ character, level, score }) => {
         bgMusic.stop();
       }
       bgMusic = play("sound3", { loop: true, volume: currentVolume });
-      backgroundSprite = "background11";
+      backgroundSprite = "black-background";
       break;
   }
   add([sprite(backgroundSprite), layer("bg"), pos(0, 0), scale(1.9, 0.495)]);
@@ -298,103 +301,150 @@ scene("game", ({ character, level, score }) => {
 
   const maps = [
     //Test level for new items
+    // level 1
     [
-      "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££",
-      "£                                                                                                                               ",
-      "£                                                                                                                               ",
-      "£                                                                                                                               ",
-      "£           %=%    $$$$$                                                                                                        ",
-      "£                > =====                                                                                                        ",
-      "£                               -+             =*=                                                                              ",
-      "£         t   =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
-      "£       ======        y   -+ () ()      =%%=        ====                            -+           -+                           y ",
-      "£    f             ^     () () ()           ^     =====                     ^  ^   ()           ()                             ",
-      "£================================================================   ====================  ======================================",
-      "£================================================================   ====================  ======================================",
+      "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+      "i                                                                                                                             i",
+      "i                                                                                                                             i",
+      "i                                                 *                             $$$$$$                                        i",
+      "i                                                                             vvvvvvvvvvv                                     i",
+      "i                                              vvvvvvv                                                                        i",
+      "i                $$$                                                                                                          i",
+      "i              vvvvvvv                                   %%%%%         ^                                                      i",
+      "i                                                                =======                           ^                          i",
+      "i         vvvv          v%%%%%v                                =========        *            vvvvvvvvvv                       i",
+      "i                                           ^                ===========                                  v    $$          -+ i",
+      "i========         ^             ^        ======            =============     t                               vvvvvv        () i",
+      "i========  ========  ===================       ======  ==================   =======                                    =======i",
     ],
+    // level 2
     [
-      "=                                                                                                         ",
-      "=                                                                                                         ",
-      "=                   $$                                                                                    ",
-      "=                  $xx                                                                                    ",
-      "=                 $xxx                                                                                    ",
-      "=                 xxxx  =*=*=                                                                             ",
-      "=                xxxxx           =*=*=                                                                    ",
-      "=       =*=@=   xxxxxx                                        }                                           ",
-      "=              xxxxxxx ====      %%%        -+           =%%=                                             ",
-      "=             xxxxxxxx                      ()                               x                         -+ ",
-      "=      z   z xxxxxxxxx                      ()()  ^    ^                                              () ",
-      "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££",
-      "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££",
+        "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+        "!                                                                                                                             i",
+        "!                                                                                                    $                        i",
+        "!                                                                                                vv  v                        i",
+        "!               g                                                  $$$                       vv                               i",
+        "!                      ^                                          vvvvv     *%%                          !  !                 i",
+        "!                   vvvvv                                                                 $              !$$!                 i",
+        "!               $                                              vv        vvvvvvvvv        x              !$$!                 i",
+        "!              ^x                   vv                  &   vv                           xxx             !$$!                 i",
+        "!             $xxx$     vvv   %%%   ()vv             v%%v                               xxxxx            !  !                 i",
+        "!            $xxxxx$                ()()                              x                xxxxxxx                            -+  i",
+        "!            xxxxxxx               &()()             ^               xxx        &     xxxxxxxxx                           ()  i",
+        "==========================    ==============================         =========================================================i",
     ],
+    // level 3
     [
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "    %   <=*=%=                        %=*=%=                                                       % ",
-      "                     w                                                            w                  ",
-      "   g                        -+                                    -+                          -+     ",
-      "             q              ()   e              rr       t     ^  ()                          ()     ",
-      "=================  ==========================  ======  ==================   =============== =========",
+      "i                                                                                                                             i",
+      '=                       $$                                                                                                    i',
+      '=                          $       $$                                                                                         i',
+      '=                   $$      $         $                                                                                       i',
+      '=                   xx          $      $                                                                                      i',
+      '=                  xxx    xxxxxxx                                                   q      x            %%%%%%                i',
+      '=                 xxxx                xxxx    $$      xxx    xxxxx                         x                                  i',
+      '=                xxxxx                                         q                           x                                  i',
+      '=       =g=     xxxxxx                       %%<%%                    t    t                            xxxxxxx               i',
+      '=              xxxxxxx             *                                  xxxxxx               x                                  i',
+      '=             xxxxxxxx                                                                     x      xxx                      -+ i',
+      '=      z   z xxxxxxxxx                    z          z                       z             x                        z  w   () i',
+      '£££££££££££££££££££££££         ££££££££££££££££££££££££££      ££       £££££££££   £££££££££££££££   £££££££  £££££££££££££££i',
     ],
+    // level 4
     [
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "                                                                                                     ",
-      "       <=*=%=                        %=*=%=                                                        % ",
-      "    g                                                                                                ",
-      "                            -+                                     -+                         -+     ",
-      "            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ",
-      "=================  ==========================  ======  ==================   =============== =========",
+      "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+      "i                                                                                                                             i",
+      "i                                                                             <                                               i",
+      'i                           <                                                 ==                                              i',
+      'i                                                                                      ===                                    i',
+      'i                          =====                                                                                              i',
+      'i                                                                                               ==                            i',
+      'i                   ===                     q   f              ==   ===          ===                                          i',
+      'i                                     ===   =====                                    q                     =                  i',
+      'i            =====                                    %%%%%%              ===            ==                                   i',
+      'i                                                                                                    ==                     -+i',
+      'i            q        tttt         ^^                        t                                             ttt          f   ()i',
+      '==================  ==========================  ======  ==================                               ========    ==========',
     ],
+    // level 5
     [
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£                                                                                                      £",
-      "£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £",
-      "£                          x x x     =*=%=                                                             £",
-      "£                        x x x x  x                                                                  -+£",
-      "£            &     & z  x x x x x  x                      &   &            &  z       &           &  ()£",
-      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ",
+      '(                                           )',
+      '(                                           )',
+      '(xxxxxxx                                    )',
+      '(                                           )',
+      '(           xxxxxxxx                        )',
+      '(                                           )',
+      '(                                           )',
+      '(                                           )',
+      '(                               t           )',
+      '(                        xxxxxxxx           )',
+      '(                                           )',
+      '(                                           )',
+      '(                 xx                        )',
+      '(                                           )',
+      '(                                           )',
+      '(                                           )',
+      '(        xxxx                               )',
+      '(                                    xxxxxx )',
+      '(                                           )',
+      '(                                           )',
+      '(               xxxxxx                   *  )',
+      '(                                           )',
+      '(                                           )',
+      '(                                        xx )',
+      '(         xx                                )',
+      '(                                           )',
+      '(                                          %)',
+      '(                                           )',
+      '(                xxxxxx                     )',
+      '(                                        xx )',
+      '(     xxx                           xx      )',
+      '(                             t             )',
+      '(            xxx           xxxxxx           )',
+      '(                                           )',
+      '(     t                                     )',
+      '(     xxx                                   )',
+      '(                                           )',
+      '(                                           )',
+      '(              xxx                          )',
+      '(                                           )',
+      '(                          t                )',
+      '(                        xxx                )',
+      '(                                           )',
+      '(                                           )',
+      '(                                           )',
+      '(       ttttt                               )',
+      '(       xxxxxxxxx                           )',
+      '(                                           )',
+      '(                      xx                   )',
+      '(                                           )',
+      '(                                           )',
+      '(                            xx             )',
+      '(                                           )',
+      '(                   xx                      )',
+      '(                                           )',
+      '(                                           )',
+      '(                                           )',
+      '(             d  d                          )',
+      '(             d  d                          )',
+      '(             d  d                          )',
+      '(              -+                           )',
+      '(              ()                           )',
     ],
-    /* level by q 
-            /* level by q
-        problems: evil shrooms don't fall; evil shrooms should move back and forth
-        requires: mushroom to also increase jump force
-        requires: finish line to go to next lvl*/
+    // level 6
     [
-      "                                                                                                                    ",
-      "                                                  *                           $$$$$$                                ",
-      "                                                                            ===========                             ",
-      "                                               =======                                                              ",
-      "                 $$$                                                                                                ",
-      "               =======                                   %%%%%         ^                                            ",
-      "                                                                 =======                           ^                ",
-      "          ====          =%%%%%=                                =========        *         ==========                ",
-      "                                            ^                ===========                               $$       -+  ",
-      "=========         ^             ^        ======            =============                             ======     ()  ",
-      "           ========  ====================      ======  ==================   =======                          =======",
-    ],
-    // level design by james
-    [
-      "!                                                                                                                   ",
-      "!                                                                                                    $              ",
-      "!                                                                                                ==  =              ",
-      "!                                                                  $$$                       ==                     ",
-      "!                      ^                                          }}}}}     *%%                          !  !       ",
-      "!                   =*===                                                                 $              !$$!       ",
-      "!               $                                              }         =======          x              !$$!       ",
-      "!              &x                   xx                      }                            xxx             !$$!       ",
-      "!             $xxx$     ===   %%%   ()               =%%=                               xxxxx&           !  !       ",
-      "!            $xxxxx$                ()xx                              x                xxxxxxx                  -+  ",
-      "!            xxxxxxx                ()()             ^ ^             xxx        &     xxxxxxxxx                 ()  ",
-      "==========================    ==============================         ===============================================",
+      "i                                                                                                                             i",
+      "i                                                                                                                             i",
+      "i                                                                >                                         q                  i",
+      'i                                                                !!                             *                             i',
+      'i               ==                                                     !!                                                     i',
+      'i                =       !!!!                                     q       q                                             q     i',
+      'i            ==  =                                !!                                            !!                            i',
+      'i            =   =                                      q          !!        !!                            !!                 i',
+      'i            =   =   !!               !!                                    q         !!                                      i',
+      'i            =  ==         *                 !!             %%%%                                     !!!                      i',
+      'i                =               !!                                         ttt   tt                                          i',
+      'i            w   =                                                          !!!!!!!!    ttttttt                              yi',
+      '==================         ==                            ===========  =====             ==========              =    ==========',
     ],
   ];
 
@@ -422,7 +472,6 @@ scene("game", ({ character, level, score }) => {
     "&": [sprite("turtle"), "turtle", "dangerous"],
     ">": [sprite("star"), "star"],
     f: [sprite("fireflower"), "fireflower"],
-    //new
     q: [sprite("fly-guy"), solid(), "dangerous"],
     w: [sprite("goomba"), solid(), "dangerous"],
     e: [sprite("koopa-green"), solid(), "dangerous"],
@@ -430,6 +479,7 @@ scene("game", ({ character, level, score }) => {
     t: [sprite('wild-piranha'), solid(), 'wild-piranha'],
     y: [sprite("flagcastle"), "flag-castle"],
     u: [sprite("goldblock"), solid()],
+    'v': [sprite('brick'), solid(), 'brick']
   };
 
   const gameLevel = addLevel(maps[level], levelCfg);
@@ -447,16 +497,16 @@ scene("game", ({ character, level, score }) => {
 
   // power-up functions
   function big() {
-    let timer = 0;
+    // let timer = 0;
     let isBig = false;
     return {
       update() {
         if (isBig) {
           CURRENT_JUMP_FORCE = BIG_JUMP_FORCE;
-          timer -= dt();
-          if (timer <= 0) {
-            this.smallify();
-          }
+          // timer -= dt();
+          // if (timer <= 0) {
+          //   this.smallify();
+          // }
         }
       },
       isBig() {
@@ -465,12 +515,12 @@ scene("game", ({ character, level, score }) => {
       smallify() {
         this.scale = vec2(1);
         CURRENT_JUMP_FORCE = JUMP_FORCE;
-        timer = 0;
+        // timer = 0;
         isBig = false;
       },
-      biggify(time) {
+      biggify() {
         this.scale = vec2(2);
-        timer = time;
+        // timer = time;
         isBig = true;
       },
     };
@@ -561,9 +611,8 @@ scene("game", ({ character, level, score }) => {
     big(),
     star(),
     firePower(),
-    origin("center"), // Sets the origin to the middle of the sprite
+    origin("center"),
     { scale: { x: 1, y: 1 } },
-    // origin(bot)
   ]);
 
   action("mushroom", (m) => {
@@ -629,13 +678,19 @@ scene("game", ({ character, level, score }) => {
     d.move(-ENEMY_SPEED, 0);
   });
 
-  player.action(() => {
-    camPos(player.pos);
-    if (player.pos.y >= FALL_DEATH) {
-      go("lose", {
-        score: scoreLabel.text,
-      });
+  if (level === 4) {
+    FALL_DEATH = 1400;
     }
+    player.action(() => {
+      camPos(player.pos);
+      if (player.pos.y >= FALL_DEATH) {
+        player.smallify();
+        player.noFire();
+        player.noStar();
+        go("lose", {
+          score: scoreLabel.text,
+        });
+      }
   });
 
   player.collides("pipe", () => {
@@ -670,13 +725,15 @@ scene("game", ({ character, level, score }) => {
 
   player.collides("dangerous", (d) => {
     if (d.is("wild-piranha")) {
-        // Do nothing when colliding with wild-piranha
         return;
     }
     if (isJumping || player.isInvincible()) {
         destroy(d);
         scoreLabel.value++;
         scoreLabel.text = "Score: " + scoreLabel.value;
+        if (isJumping) {
+            player.jump(CURRENT_JUMP_FORCE / 1.5)
+        }
     } else if (player.isBig()) {
         destroy(d);
         player.smallify();
@@ -733,15 +790,15 @@ scene("game", ({ character, level, score }) => {
 
   scene("victory", ({ score }) => {
     add([
-      text("Congrats, you did it, well done! Whoo, so good!", 16), // Adjusted the font size and text content
+      text("Congrats, you did it, well done! Whoo, so good!", 16), 
       origin("center"),
-      pos(width() / 2, height() / 2 - 20), // Adjusted the position
+      pos(width() / 2, height() / 2 - 20), 
     ]);
     add([text(score, 16), origin("center"), pos(width() / 2, height() / 2)]);
     add([
-      text("Press 'space' to restart the game!", 12), // Adjusted the font size
+      text("Press 'space' to restart the game!", 12), 
       origin("center"),
-      pos(width() / 2, height() / 2 + 20), // Adjusted the position
+      pos(width() / 2, height() / 2 + 20), 
     ]);
     keyPress("space", () => {
       go("characterSelect");
