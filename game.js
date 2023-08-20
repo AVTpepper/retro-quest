@@ -42,7 +42,7 @@ loadSprite("background8", "assets/images/background8.png");
 loadSprite("background9", "assets/images/background9.png");
 
 loadSprite("turtle", "assets/images/turtle.png"); // add turtle
-loadSprite("star", "assets/images/starsprite.png"); // temp star sprite
+loadSprite("star", "assets/images/img20x20/star.png"); // temp star sprite
 loadSprite("turtle", "assets/images/turtle.png");
 loadSprite("fireball", "assets/images/fireball.png");
 loadSprite("fireflower", "assets/images/fire-flower.png");
@@ -235,14 +235,14 @@ scene("game", ({ character, level, score }) => {
     const maps = [
         //Test level for new items
         [
-            "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££",
+            "££££££££££££££££££ £££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££",
             "£                                                                                                                               ",
             "£                                                                                                                               ",
             "£                                                                                                                               ",
-            "£           %=%    $$$$$                                                                                                        ",
+            "            %=%    $$$$$                                                                                                        ",
             "£                > =====                                                                                                        ",
-            "£                               -+             =*=                                                                              ",
-            "£            =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
+            "£               t                -+             =*=    t                                                                        ",
+            "£        >   =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
             "£       ======            -+ () ()      =%%=        ====                            -+           -+                           y ",
             "£    f             ^      () () ()           ^     =====                     ^  ^   ()           ()                             ",
             "£================================================================   ====================  ======================================",
@@ -359,11 +359,11 @@ scene("game", ({ character, level, score }) => {
         '>': [sprite('star'), 'star'],
         'f': [sprite('fireflower'), 'fireflower'],
         //new
-        'q': [sprite('fly-guy'), solid(), 'dangerous'],
-        'w': [sprite('goomba'), solid(), 'dangerous'],
-        'e': [sprite('koopa-green'), solid(), 'dangerous'],
-        'r': [sprite('shy-guy'), solid(), 'dangerous'],
-        't': [sprite('wild-piranha'), solid(), 'dangerous'],
+        'q': [sprite('fly-guy'), solid(), 'dangerous',],
+        'w': [sprite('goomba'), solid(), 'dangerous', body()],
+        'e': [sprite('koopa-green'), solid(), 'dangerous', body()],
+        'r': [sprite('shy-guy'), solid(), 'dangerous', body()],
+        't': [sprite('wild-piranha'), solid(), 'wild-piranha'],
         'y': [sprite('flagcastle'), solid()],
         'u': [sprite('goldblock'), solid()],
     }
@@ -437,6 +437,9 @@ scene("game", ({ character, level, score }) => {
                 timer = time;
                 isInvincible = true;
             },
+            getOpacity() {
+                return isInvincible ? 0.5 : 1.0;
+            }
         };
     }
 
@@ -444,6 +447,10 @@ scene("game", ({ character, level, score }) => {
         const fireball = add([sprite("fireball"), pos(p), "fireball"]);
         fireball.collides("dangerous", (d) => {
             destroy(d);
+            destroy(fireball);
+        });
+        fireball.collides("wild-piranha", (piranha) => {
+            destroy(piranha);
             destroy(fireball);
         });
         wait(1.5, () => {
@@ -561,6 +568,10 @@ scene("game", ({ character, level, score }) => {
         d.move(-ENEMY_SPEED, 0);
     });
 
+    // action("dangerous", (d) => {
+    //     d.move(-ENEMY_SPEED, 0);
+    // });
+
     player.action(() => {
         camPos(player.pos);
         if (player.pos.y >= FALL_DEATH) {
@@ -568,6 +579,7 @@ scene("game", ({ character, level, score }) => {
                 score: scoreLabel.text,
             });
         }
+        layer("obj").alpha = player.getOpacity(); // Update the opacity
     });
 
     player.collides("pipe", () => {
@@ -583,8 +595,30 @@ scene("game", ({ character, level, score }) => {
         });
     });
 
+    player.collides("wild-piranha", (d) => {
+        if ( player.isInvincible()) {
+            destroy(d);
+            scoreLabel.value++;
+            scoreLabel.text = "Score: " + scoreLabel.value;
+        } else if (player.isBig()) {
+            destroy(d);
+            player.smallify();
+            scoreLabel.value++;
+            scoreLabel.text = "Score: " + scoreLabel.value;
+        } else {
+            go("lose", {
+                score: scoreLabel.text,
+            });
+        }
+    });
+
     player.collides("dangerous", (d) => {
-        if (isJumping || player.isInvincible()) {
+        if (d.is("wild-piranha")) {
+            // Do nothing when colliding with wild-piranha
+            return;
+        }
+        
+        if (player.isInvincible()) {
             destroy(d);
             scoreLabel.value++;
             scoreLabel.text = "Score: " + scoreLabel.value;
