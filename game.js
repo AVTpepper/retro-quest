@@ -8,6 +8,48 @@ kaboom({
   clearColor: [0, 0, 0, 1],
 });
 
+// Load the sounds
+loadSound("sound1", "assets/arcade-sounds/sound1.mp3");
+loadSound("sound2", "assets/arcade-sounds/sound2.mp3");
+loadSound("sound3", "assets/arcade-sounds/sound3.mp3");
+
+// Sound Control
+let bgMusic = null;
+const muteIcon = document.querySelector('.mute-icon');
+const unmuteIcon = document.querySelector('.unmute-icon');
+
+function updateMuteIcon() {
+  if (bgMusic) {
+    if (bgMusic.volume() === 0) {
+      muteIcon.style.display = 'inline';
+      unmuteIcon.style.display = 'none';
+    } else {
+      muteIcon.style.display = 'none';
+      unmuteIcon.style.display = 'inline';
+    }
+}
+}
+
+// increase the sound volume
+muteIcon.addEventListener('click', () => {
+  if (bgMusic) {
+    bgMusic.volume(0.3);
+    updateMuteIcon();
+  }
+});
+
+// decrease the sound volume
+unmuteIcon.addEventListener('click', () => {
+  if (bgMusic) {
+    bgMusic.volume(0);
+    updateMuteIcon();
+  }
+});
+
+// Ensure the correct icon is displayed initially
+updateMuteIcon();
+
+
 // Speed identifiers
 const MOVE_SPEED = 120;
 const JUMP_FORCE = 360;
@@ -22,13 +64,6 @@ const ENEMY_SPEED = 20;
 let isJumping = true;
 // let isInvincible = false
 // let hasFire = true
-
-
-//music
-loadSound("sound1", "assets/arcade-sounds/sound1.mp3")
-loadSound("sound2", "assets/arcade-sounds/sound2.mp3")
-loadSound("sound3", "assets/arcade-sounds/sound3.mp3")
-
 
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite("background", "assets/images/background.png");
@@ -157,6 +192,7 @@ scene("characterSelect", () => {
   });
 
   keyPress("space", () => {
+    console.log("Selected character:", characters[selectedCharacter]); // Debug statement
     go("game", {
       character: characters[selectedCharacter],
       level: 0,
@@ -166,44 +202,73 @@ scene("characterSelect", () => {
 });
 
 scene("game", ({ character, level, score }) => {
-    layers(["bg", "obj", "ui"], "obj");
-    let bgMusic;
+  layers(["bg", "obj", "ui"], "obj");
 
-    let backgroundSprite;
-    switch (level) {
-        case 0:
-            backgroundSprite = "background1";
-            if (bgMusic) bgMusic.stop();
-            bgMusic = play("sound1", {loop: true, volume: 0.7})
-            break;
-        case 1:
-            backgroundSprite = "background2";
-            if (bgMusic) bgMusic.stop();
-            bgMusic = play("sound2", {loop: true, volume: 0.7})
-            break;
-        case 2:
-            backgroundSprite = "background3";
-            if (bgMusic) bgMusic.stop();
-            bgMusic = play("sound3", {loop: true, volume: 0.7})
-            break;
-        case 3:
-            backgroundSprite = "background3";
-            break;
-        case 4:
-            backgroundSprite = "background3";
-            break;
-        case 5:
-            backgroundSprite = "background3";
-            break;
-        case 6:
-            backgroundSprite = "background3";
-            break;
-        case 7:
-            backgroundSprite = "background3";
-            break;
-
-    default:
+  let backgroundSprite;
+  switch (level) {
+    case 0:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound1", { loop: true, volume: 0.3 });
       backgroundSprite = "background1";
+      break;
+    case 1:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound2", { loop: true, volume: 0.3 });
+      backgroundSprite = "background2";
+      break;
+    case 2:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound3", { loop: true, volume: 0.3 });
+      backgroundSprite = "background3";
+      break;
+    case 3:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound1", { loop: true, volume: 0.3 });
+      backgroundSprite = "background4";
+      break;
+    case 4:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound2", { loop: true, volume: 0.3 });
+      backgroundSprite = "background6";
+      break;
+    case 5:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound3", { loop: true, volume: 0.3 });
+      backgroundSprite = "background7";
+      break;
+    case 6:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound1", { loop: true, volume: 0.3 });
+      backgroundSprite = "background8";
+      break;
+    case 7:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound2", { loop: true, volume: 0.3 });
+      backgroundSprite = "background3";
+      break;
+    default:
+      if (bgMusic) {
+        bgMusic.stop();
+      }
+      bgMusic = play("sound3", { loop: true, volume: 0.3 });
+      backgroundSprite = "background3";
+      break;;
   }
   add([sprite(backgroundSprite), layer("bg"), pos(0, 0), scale(1.9, 0.495)]);
 
@@ -622,15 +687,19 @@ scene("game", ({ character, level, score }) => {
     }
   });
 
-    keyPress("space", () => {
-        if (player.grounded()) {
-            isJumping = true;
-            player.jump(CURRENT_JUMP_FORCE);
-        }
-    });
+  keyPress("space", () => {
+    if (player.grounded()) {
+      isJumping = true;
+      player.jump(CURRENT_JUMP_FORCE);
+    }
+  });
 });
 
 scene("lose", ({ score }) => {
+  if (bgMusic) {
+    bgMusic.stop();
+    bgMusic = null;
+  }
   add([text(score, 32), origin("center"), pos(width() / 2, height() / 2)]);
   add([
     text("Press 'space' to restart the game!", 16),
@@ -642,4 +711,4 @@ scene("lose", ({ score }) => {
   });
 });
 
-  start("characterSelect");
+start("characterSelect");
