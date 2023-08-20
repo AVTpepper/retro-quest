@@ -306,7 +306,7 @@ scene("game", ({ character, level, score }) => {
       "£           %=%    $$$$$                                                                                                        ",
       "£                > =====                                                                                                        ",
       "£                               -+             =*=                                                                              ",
-      "£            =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
+      "£         t   =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
       "£       ======        y   -+ () ()      =%%=        ====                            -+           -+                           y ",
       "£    f             ^     () () ()           ^     =====                     ^  ^   ()           ()                             ",
       "£================================================================   ====================  ======================================",
@@ -427,7 +427,7 @@ scene("game", ({ character, level, score }) => {
     w: [sprite("goomba"), solid(), "dangerous"],
     e: [sprite("koopa-green"), solid(), "dangerous"],
     r: [sprite("shy-guy"), solid(), "dangerous"],
-    t: [sprite("wild-piranha"), solid(), "dangerous"],
+    t: [sprite('wild-piranha'), solid(), 'wild-piranha'],
     y: [sprite("flagcastle"), "flag-castle"],
     u: [sprite("goldblock"), solid()],
   };
@@ -507,11 +507,15 @@ scene("game", ({ character, level, score }) => {
   function spawnFireball(p) {
     const fireball = add([sprite("fireball"), pos(p), "fireball"]);
     fireball.collides("dangerous", (d) => {
-      destroy(d);
-      destroy(fireball);
+        destroy(d);
+        destroy(fireball);
+    });
+    fireball.collides("wild-piranha", (piranha) => {
+        destroy(piranha);
+        destroy(fireball);
     });
     wait(1.5, () => {
-      destroy(fireball);
+        destroy(fireball);
     });
   }
 
@@ -647,20 +651,41 @@ scene("game", ({ character, level, score }) => {
     });
   });
 
-  player.collides("dangerous", (d) => {
-    if (isJumping || player.isInvincible()) {
-      destroy(d);
-      scoreLabel.value++;
-      scoreLabel.text = "Score: " + scoreLabel.value;
+  player.collides("wild-piranha", (d) => {
+    if (player.isInvincible()) {
+        destroy(d);
+        scoreLabel.value++;
+        scoreLabel.text = "Score: " + scoreLabel.value;
     } else if (player.isBig()) {
-      destroy(d);
-      player.smallify();
-      scoreLabel.value++;
-      scoreLabel.text = "Score: " + scoreLabel.value;
+        destroy(d);
+        player.smallify();
+        scoreLabel.value++;
+        scoreLabel.text = "Score: " + scoreLabel.value;
     } else {
-      go("lose", {
-        score: scoreLabel.text,
-      });
+        go("lose", {
+            score: scoreLabel.text,
+        });
+    }
+  });
+
+  player.collides("dangerous", (d) => {
+    if (d.is("wild-piranha")) {
+        // Do nothing when colliding with wild-piranha
+        return;
+    }
+    if (player.isInvincible()) {
+        destroy(d);
+        scoreLabel.value++;
+        scoreLabel.text = "Score: " + scoreLabel.value;
+    } else if (player.isBig()) {
+        destroy(d);
+        player.smallify();
+        scoreLabel.value++;
+        scoreLabel.text = "Score: " + scoreLabel.value;
+    } else {
+        go("lose", {
+            score: scoreLabel.text,
+        });
     }
   });
 
