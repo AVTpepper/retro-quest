@@ -1,3 +1,0 @@
-## Collaborators
-
-## Test string
