@@ -673,7 +673,7 @@ scene("game", ({ character, level, score }) => {
         // Do nothing when colliding with wild-piranha
         return;
     }
-    if (player.isInvincible()) {
+    if (isJumping || player.isInvincible()) {
         destroy(d);
         scoreLabel.value++;
         scoreLabel.text = "Score: " + scoreLabel.value;
