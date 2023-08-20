@@ -10,6 +10,9 @@ body {
     z-index: 1000;
 
 }
+.mute-icon {
+    display: none;
+}
 
 .mute-icon,
 .unmute-icon {
