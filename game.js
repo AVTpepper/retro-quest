@@ -8,51 +8,6 @@ kaboom({
     clearColor: [0, 0, 0, 1],
 });
 
-// Load the sounds
-loadSound("sound1", "assets/arcade-sounds/sound1.mp3");
-loadSound("sound2", "assets/arcade-sounds/sound2.mp3");
-loadSound("sound3", "assets/arcade-sounds/sound3.mp3");
-
-// Sound Control
-let isMuted = false;
-let bgMusic = null;
-const muteIcon = document.querySelector('.mute-icon');
-const unmuteIcon = document.querySelector('.unmute-icon');
-
-function updateMuteIcon() {
-  if (bgMusic) {
-    if (bgMusic.volume() === 0) {
-      muteIcon.style.display = 'inline';
-      unmuteIcon.style.display = 'none';
-    } else {
-      muteIcon.style.display = 'none';
-      unmuteIcon.style.display = 'inline';
-    }
-}
-}
-
-// increase the sound volume
-muteIcon.addEventListener('click', () => {
-  if (bgMusic) {
-    bgMusic.volume(0.3);
-    isMuted = false;
-    updateMuteIcon();
-  }
-});
-
-// decrease the sound volume
-unmuteIcon.addEventListener('click', () => {
-  if (bgMusic) {
-    bgMusic.volume(0);
-    isMuted = true;
-    updateMuteIcon();
-  }
-});
-
-// Ensure the correct icon is displayed initially
-updateMuteIcon();
-
-
 // Speed identifiers
 const MOVE_SPEED = 120;
 const JUMP_FORCE = 360;
@@ -68,6 +23,13 @@ let isJumping = true;
 // let isInvincible = false
 // let hasFire = true
 
+
+//music
+loadSound("sound1", "assets/arcade-sounds/sound1.mp3")
+loadSound("sound2", "assets/arcade-sounds/sound2.mp3")
+loadSound("sound3", "assets/arcade-sounds/sound3.mp3")
+
+
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite("background", "assets/images/background.png");
 loadSprite("background1", "assets/images/background1.png");
@@ -80,7 +42,7 @@ loadSprite("background8", "assets/images/background8.png");
 loadSprite("background9", "assets/images/background9.png");
 
 loadSprite("turtle", "assets/images/turtle.png"); // add turtle
-loadSprite("star", "assets/images/starsprite.png"); // temp star sprite
+loadSprite("star", "assets/images/img20x20/star.png"); // temp star sprite
 loadSprite("turtle", "assets/images/turtle.png");
 loadSprite("fireball", "assets/images/fireball.png");
 loadSprite("fireflower", "assets/images/fire-flower.png");
@@ -135,31 +97,11 @@ scene("characterSelect", () => {
         scale(1.9, 0.495),
     ]);
 
-  add([
-    text("Use arrow keys to select character and 'space' to start the game", 8),
-    origin("center"),
-    pos(width() / 2, height() / 2 + 20),
-  ]);
-  add([
-    text("Controls:", 8),
-    origin("center"),
-    pos(width() / 2, height() / 2 + 60),
-  ]);
-  add([
-    text("Left and right arrows: Move character left and right", 8),
-    origin("center"),
-    pos(width() / 2, height() / 2 + 100),
-  ]);
-  add([
-    text("Down arrow: Use a pipe to move to the next level", 8),
-    origin("center"),
-    pos(width() / 2, height() / 2 + 120),
-  ]);
-  add([
-    text("Space: Jump, F: Use power-up ability", 8),
-    origin("center"),
-    pos(width() / 2, height() / 2 + 140),
-  ]);
+    add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
+    add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
+    add([text("Left and right arrows: Move character left and right", 8), origin('center'), pos(width() / 2, (height() / 2) + 100)])
+    add([text("Down arrow: Use a pipe to move to the next level", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
+    add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 140)])
 
     let selectedCharacter = 0;
 
@@ -207,78 +149,68 @@ scene("characterSelect", () => {
 
 
 scene("game", ({ character, level, score }) => {
-  layers(["bg", "obj", "ui"], "obj");
+    layers(["bg", "obj", "ui"], "obj");
+    let bgMusic;
 
-  let backgroundSprite;
-  let currentVolume = isMuted ? 0 : 0.3;
-  switch (level) {
-    case 0:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound1", { loop: true, volume: currentVolume });
-      backgroundSprite = "background2";
-      break;
-    case 1:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound2", { loop: true, volume: currentVolume });
-      backgroundSprite = "background3";
-      break;
-    case 2:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound3", { loop: true, volume: currentVolume });
-      backgroundSprite = "background4";
-      break;
-    case 3:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound1", { loop: true, volume: currentVolume });
-      backgroundSprite = "background6";
-      break;
-    case 4:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound2", { loop: true, volume: currentVolume });
-      backgroundSprite = "background7";
-      break;
-    case 5:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound3", { loop: true, volume: currentVolume });
-      backgroundSprite = "background8";
-      break;
-    case 6:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound1", { loop: true, volume: currentVolume });
-      backgroundSprite = "background9";
-      break;
-    case 7:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound2", { loop: true, volume: currentVolume });
-      backgroundSprite = "background10";
-      break;
-    default:
-      if (bgMusic) {
-        bgMusic.stop();
-      }
-      bgMusic = play("sound3", { loop: true, volume: currentVolume });
-      backgroundSprite = "background11";
-      break;;
-  }
-  add([sprite(backgroundSprite), layer("bg"), pos(0, 0), scale(1.9, 0.495)]);
+    let backgroundSprite;
+    switch (level) {
+        case 0:
+            backgroundSprite = "background2";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound1", { loop: true, volume: 0.7 })
+            break;
+        case 1:
+            backgroundSprite = "background3";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound2", { loop: true, volume: 0.7 })
+            break;
+        case 2:
+            backgroundSprite = "background4";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound3", { loop: true, volume: 0.7 })
+            break;
+        case 3:
+            backgroundSprite = "background5";
+            if (bgMusic) bgMusic.stop();
+            break;
+        case 4:
+            backgroundSprite = "background6";
+            if (bgMusic) bgMusic.stop();
+            break;
+        case 5:
+            backgroundSprite = "background7";
+            if (bgMusic) bgMusic.stop();
+            break;
+        case 6:
+            backgroundSprite = "background8";
+            if (bgMusic) bgMusic.stop();
+            break;
+        case 7:
+            backgroundSprite = "background9";
+            if (bgMusic) bgMusic.stop();
+            break;
 
-  
+
+        default:
+            backgroundSprite = "background2";
+    }
+    add([
+        sprite(backgroundSprite),
+        layer("bg"),
+        pos(0, 0),
+        scale(1.9, .495)
+    ]);
+
+    
+
+
+
+
+
+
+
+
+
     const spriteWidth = 400;
     const levelWidth = 1750;
 
@@ -293,24 +225,24 @@ scene("game", ({ character, level, score }) => {
         ]);
     }
 
-  // add([
-  //     sprite("background"),
-  //     layer('bg'),
-  //     origin('center'),
-  //     pos(width() / 2, height() / 4),
-  //     scale(1.9, .495)
+    // add([
+    //     sprite("background"),
+    //     layer('bg'),
+    //     origin('center'),
+    //     pos(width() / 2, height() / 4),
+    //     scale(1.9, .495)
 
     const maps = [
         //Test level for new items
         [
-            "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££",
+            "££££££££££££££££££ £££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££",
             "£                                                                                                                               ",
             "£                                                                                                                               ",
             "£                                                                                                                               ",
-            "£           %=%    $$$$$                                                                                                        ",
+            "            %=%    $$$$$                                                                                                        ",
             "£                > =====                                                                                                        ",
-            "£                               -+             =*=                                                                              ",
-            "£            =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
+            "£               t                -+             =*=    t                                                                        ",
+            "£        >   =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
             "£       ======            -+ () ()      =%%=        ====                            -+           -+                           y ",
             "£    f             ^      () () ()           ^     =====                     ^  ^   ()           ()                             ",
             "£================================================================   ====================  ======================================",
@@ -402,39 +334,39 @@ scene("game", ({ character, level, score }) => {
         ],
     ];
 
-  const levelCfg = {
-    width: 20,
-    height: 20,
-    "=": [sprite("block"), solid()],
-    $: [sprite("coin"), "coin"],
-    "%": [sprite("surprise"), solid(), "coin-surprise"],
-    "*": [sprite("surprise"), solid(), "mushroom-surprise"],
-    "<": [sprite("surprise"), solid(), "star-surprise"],
-    g: [sprite("surprise"), solid(), "fire-surprise"],
-    "}": [sprite("unboxed"), solid()],
-    "(": [sprite("pipe-bottom-left"), solid(), scale(0.5)],
-    ")": [sprite("pipe-bottom-right"), solid(), scale(0.5)],
-    "-": [sprite("pipe-top-left"), solid(), scale(0.5), "pipe"],
-    "+": [sprite("pipe-top-right"), solid(), scale(0.5), "pipe"],
-    "^": [sprite("evil-shroom"), solid(), "dangerous", body()],
-    "#": [sprite("mushroom"), solid(), "mushroom", body()],
-    "!": [sprite("blue-block"), solid(), scale(0.5)],
-    "£": [sprite("blue-brick"), solid(), scale(0.5)],
-    z: [sprite("blue-evil-shroom"), solid(), scale(0.5), "dangerous"],
-    "@": [sprite("blue-surprise"), solid(), scale(0.5), "coin-surprise"],
-    x: [sprite("blue-steel"), solid(), scale(0.5)],
-    "&": [sprite("turtle"), "turtle", "dangerous"],
-    ">": [sprite("star"), "star"],
-    f: [sprite("fireflower"), "fireflower"],
-    //new
-    q: [sprite("fly-guy"), solid(), "dangerous"],
-    w: [sprite("goomba"), solid(), "dangerous"],
-    e: [sprite("koopa-green"), solid(), "dangerous"],
-    r: [sprite("shy-guy"), solid(), "dangerous"],
-    t: [sprite("wild-piranha"), solid(), "dangerous"],
-    y: [sprite("flagcastle"), solid()],
-    u: [sprite("goldblock"), solid()],
-  };
+    const levelCfg = {
+        width: 20,
+        height: 20,
+        '=': [sprite('block'), solid()],
+        '$': [sprite('coin'), 'coin'],
+        '%': [sprite('surprise'), solid(), 'coin-surprise'],
+        '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
+        '<': [sprite('surprise'), solid(), 'star-surprise'],
+        'g': [sprite('surprise'), solid(), 'fire-surprise'],
+        '}': [sprite('unboxed'), solid()],
+        '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
+        ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
+        '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
+        '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
+        '^': [sprite('evil-shroom'), solid(), 'dangerous', body()],
+        '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+        '!': [sprite('blue-block'), solid(), scale(0.5)],
+        '£': [sprite('blue-brick'), solid(), scale(0.5)],
+        'z': [sprite('blue-evil-shroom'), solid(), scale(0.5), 'dangerous'],
+        '@': [sprite('blue-surprise'), solid(), scale(0.5), 'coin-surprise'],
+        'x': [sprite('blue-steel'), solid(), scale(0.5)],
+        '&': [sprite('turtle'), 'turtle', 'dangerous'],
+        '>': [sprite('star'), 'star'],
+        'f': [sprite('fireflower'), 'fireflower'],
+        //new
+        'q': [sprite('fly-guy'), solid(), 'dangerous',],
+        'w': [sprite('goomba'), solid(), 'dangerous', body()],
+        'e': [sprite('koopa-green'), solid(), 'dangerous', body()],
+        'r': [sprite('shy-guy'), solid(), 'dangerous', body()],
+        't': [sprite('wild-piranha'), solid(), 'wild-piranha'],
+        'y': [sprite('flagcastle'), solid()],
+        'u': [sprite('goldblock'), solid()],
+    }
 
     const gameLevel = addLevel(maps[level], levelCfg);
 
@@ -505,6 +437,9 @@ scene("game", ({ character, level, score }) => {
                 timer = time;
                 isInvincible = true;
             },
+            getOpacity() {
+                return isInvincible ? 0.5 : 1.0;
+            }
         };
     }
 
@@ -514,44 +449,48 @@ scene("game", ({ character, level, score }) => {
             destroy(d);
             destroy(fireball);
         });
+        fireball.collides("wild-piranha", (piranha) => {
+            destroy(piranha);
+            destroy(fireball);
+        });
         wait(1.5, () => {
             destroy(fireball);
         });
     }
 
-  function firePower() {
-    let timer = 0;
-    let hasFire = false;
-    return {
-      update() {
-        if (hasFire) {
-          keyPress("f", () => {
-            spawnFireball(player.pos.sub(-10, 10));
-          });
-          action("fireball", (f) => {
-            f.move(MOVE_SPEED, 0);
-          });
-          while (timer > 0) {
-            timer -= 1;
-            if (timer <= 0) {
-              this.noFire();
+    function firePower() {
+        let timer = 0
+        let hasFire = false
+        return {
+            update() {
+                if (hasFire) {
+                    keyPress('f', () => {
+                        spawnFireball(player.pos.sub(-10, 10))
+                    })
+                    action('fireball', (f) => {
+                        f.move(MOVE_SPEED, 0)
+                    })
+                    while (timer > 0) {
+                        timer -= 1
+                        if (timer <= 0) {
+                            this.noFire()
+                        }
+                    }
+                }
+            },
+            hasFire() {
+                return hasFire
+            },
+            noFire() {
+                timer = 0
+                hasFire = false
+            },
+            fireUp(time) {
+                timer = time
+                hasFire = true
             }
-          }
         }
-      },
-      hasFire() {
-        return hasFire;
-      },
-      noFire() {
-        timer = 0;
-        hasFire = false;
-      },
-      fireUp(time) {
-        timer = time;
-        hasFire = true;
-      },
-    };
-  }
+    }
 
     const player = add([
         sprite(character),
@@ -629,6 +568,10 @@ scene("game", ({ character, level, score }) => {
         d.move(-ENEMY_SPEED, 0);
     });
 
+    // action("dangerous", (d) => {
+    //     d.move(-ENEMY_SPEED, 0);
+    // });
+
     player.action(() => {
         camPos(player.pos);
         if (player.pos.y >= FALL_DEATH) {
@@ -636,6 +579,7 @@ scene("game", ({ character, level, score }) => {
                 score: scoreLabel.text,
             });
         }
+        layer("obj").alpha = player.getOpacity(); // Update the opacity
     });
 
     player.collides("pipe", () => {
@@ -651,8 +595,30 @@ scene("game", ({ character, level, score }) => {
         });
     });
 
+    player.collides("wild-piranha", (d) => {
+        if ( player.isInvincible()) {
+            destroy(d);
+            scoreLabel.value++;
+            scoreLabel.text = "Score: " + scoreLabel.value;
+        } else if (player.isBig()) {
+            destroy(d);
+            player.smallify();
+            scoreLabel.value++;
+            scoreLabel.text = "Score: " + scoreLabel.value;
+        } else {
+            go("lose", {
+                score: scoreLabel.text,
+            });
+        }
+    });
+
     player.collides("dangerous", (d) => {
-        if (isJumping || player.isInvincible()) {
+        if (d.is("wild-piranha")) {
+            // Do nothing when colliding with wild-piranha
+            return;
+        }
+        
+        if (player.isInvincible()) {
             destroy(d);
             scoreLabel.value++;
             scoreLabel.text = "Score: " + scoreLabel.value;
@@ -682,32 +648,28 @@ scene("game", ({ character, level, score }) => {
         player.move(CURRENT_MOVE_SPEED, 0);
     });
 
-  player.action(() => {
-    if (player.grounded()) {
-      isJumping = false;
-      if (keyIsDown("left")) {
-        player.move(-CURRENT_MOVE_SPEED, 0);
-        player.scale.x = -1; // Flip the sprite horizontally
-      } else if (keyIsDown("right")) {
-        player.move(CURRENT_MOVE_SPEED, 0);
-        player.scale.x = 1; // Reset the sprite to its original orientation
-      }
-    }
-  });
+    player.action(() => {
+        if (player.grounded()) {
+            isJumping = false;
+            if (keyIsDown("left")) {
+                player.move(-CURRENT_MOVE_SPEED, 0);
+                player.scale.x = -1; // Flip the sprite horizontally
+            } else if (keyIsDown("right")) {
+                player.move(CURRENT_MOVE_SPEED, 0);
+                player.scale.x = 1; // Reset the sprite to its original orientation
+            }
+        }
+    });
 
-  keyPress("space", () => {
-    if (player.grounded()) {
-      isJumping = true;
-      player.jump(CURRENT_JUMP_FORCE);
-    }
-  });
+    keyPress("space", () => {
+        if (player.grounded()) {
+            isJumping = true;
+            player.jump(CURRENT_JUMP_FORCE);
+        }
+    });
 });
 
 scene("lose", ({ score }) => {
-  if (bgMusic) {
-    bgMusic.stop();
-    bgMusic = null;
-  }
     add([text(score, 32), origin("center"), pos(width() / 2, height() / 2)]);
     add([
         text("Press 'space' to restart the game!", 16),
@@ -720,3 +682,4 @@ scene("lose", ({ score }) => {
 });
 
 start("characterSelect");
+// start("game", { level: 0, score: 0 })
