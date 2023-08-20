@@ -107,12 +107,17 @@ In the event of the player's defeat at the end of the game, a score summary page
 The game design of **Mario Retro Quest** was built upon the custom version of Mario by GitHub user [kubowania](https://github.com/kubowania). You can find her work at [this link](https://github.com/kubowania/mario/blob/main/README.md).
 
 Images and sounds used for design were sourced from various platforms, ensuring a visually appealing and captivating experience:
-- (list of images sourses)
-- (list of sounds sourses)
+### Images
+
+- [Spriters Resource](https://www.spriters-resource.com/)
+- [Mario Wiki](https://www.mariowiki.com/)
+
+### Background sounds
+-   Music from [Zapsplat](https://www.zapsplat.com)
+-   Music from [Pixabay](https://www.pixabay.com)
 
 Thank you for choosing *Mario Retro Quest*! Immerse yourself in the world of retro gaming with a new and exciting perspective!
 
+test
+
 <hr>
-
-
- 
