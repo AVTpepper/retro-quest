@@ -19,27 +19,35 @@ const ENEMY_SPEED = 20;
 
 // Game logic
 
-let isJumping = true
+let isJumping = true;
 // let isInvincible = false
 // let hasFire = true
 
+
+//music
+loadSound("sound1", "assets/arcade-sounds/sound1.mp3")
+loadSound("sound2", "assets/arcade-sounds/sound2.mp3")
+loadSound("sound3", "assets/arcade-sounds/sound3.mp3")
+
+
 // loadAseprite('mario', 'assets/images/Mario.png', 'assets/images/Mario.json')
 loadSprite("background", "assets/images/background.png");
-loadSprite("background1", "assets/images/background.png");
+loadSprite("background1", "assets/images/background1.png");
 loadSprite("background2", "assets/images/background2.png");
 loadSprite("background3", "assets/images/background3.png");
 loadSprite("background4", "assets/images/background4.png");
 loadSprite("background6", "assets/images/background6.png");
 loadSprite("background7", "assets/images/background7.png");
 loadSprite("background8", "assets/images/background8.png");
+loadSprite("background9", "assets/images/background9.png");
 
-loadSprite('turtle', 'assets/images/turtle.png') // add turtle
-loadSprite('star', 'assets/images/starsprite.png') // temp star sprite
-loadSprite('turtle', 'assets/images/turtle.png')
-loadSprite('fireball', 'assets/images/fireball.png')
-loadSprite('fireflower', 'assets/images/fire-flower.png')
-loadSprite('flagcastle', 'assets/images/img40x40/flag-castle-lg.png')
-loadSprite('goldblock', 'assets/images/img20x20/gold-block.png')
+loadSprite("turtle", "assets/images/turtle.png"); // add turtle
+loadSprite("star", "assets/images/starsprite.png"); // temp star sprite
+loadSprite("turtle", "assets/images/turtle.png");
+loadSprite("fireball", "assets/images/fireball.png");
+loadSprite("fireflower", "assets/images/fire-flower.png");
+loadSprite("flagcastle", "assets/images/img40x40/flag-castle-lg.png");
+loadSprite("goldblock", "assets/images/img20x20/gold-block.png");
 
 //new enemies
 loadSprite("fly-guy", "assets/images/img20x20/fly-guy.png");
@@ -48,7 +56,6 @@ loadSprite("koopa-green", "assets/images/img20x20/koopa-green.png");
 loadSprite("shy-guy", "assets/images/img20x20/shy-guy.png");
 loadSprite("wild-piranha", "assets/images/img20x20/wild-piranha.png");
 
-
 //main character
 
 loadSprite("mario", "assets/images/img20x20/mario-b.png");
@@ -56,7 +63,6 @@ loadSprite("luigi", "assets/images/img20x20/luigi.png");
 loadSprite("peach", "assets/images/img20x20/peach.png");
 loadSprite("donkey-kong", "assets/images/img20x20/donkey-kong.png");
 loadSprite("ci-logo", "assets/images/img20x20/ci-logo.png");
-
 
 loadRoot("https://i.imgur.com/");
 loadSprite("coin", "wbKxhcd.png");
@@ -71,11 +77,11 @@ loadSprite("pipe-top-right", "hj2GK4n.png");
 loadSprite("pipe-bottom-left", "c1cYSbt.png");
 loadSprite("pipe-bottom-right", "nqQ79eI.png");
 
-loadSprite('blue-block', 'fVscIbn.png')
-loadSprite('blue-brick', '3e5YRQd.png')
-loadSprite('blue-steel', 'gqVoI2b.png')
-loadSprite('blue-evil-shroom', 'SvV4ueD.png')
-loadSprite('blue-surprise', 'RMqCc1G.png')
+loadSprite("blue-block", "fVscIbn.png");
+loadSprite("blue-brick", "3e5YRQd.png");
+loadSprite("blue-steel", "gqVoI2b.png");
+loadSprite("blue-evil-shroom", "SvV4ueD.png");
+loadSprite("blue-surprise", "RMqCc1G.png");
 
 // selection screen
 const characters = ["mario", "luigi", "peach", "donkey-kong", "ci-logo"];
@@ -85,11 +91,11 @@ scene("characterSelect", () => {
 
     add([
         sprite("background"),
-        layer('bg'),
-        origin('center'),
+        layer("bg"),
+        origin("center"),
         pos(width() / 2, height() / 4),
-        scale(1.9, .495)
-    ])
+        scale(1.9, 0.495),
+    ]);
 
     add([text("Use arrow keys to select character and 'space' to start the game", 8), origin('center'), pos(width() / 2, (height() / 2) + 20)])
     add([text("Controls:", 8), origin('center'), pos(width() / 2, (height() / 2) + 60)])
@@ -97,23 +103,23 @@ scene("characterSelect", () => {
     add([text("Down arrow: Use a pipe to move to the next level", 8), origin('center'), pos(width() / 2, (height() / 2) + 120)])
     add([text("Space: Jump, F: Use power-up ability", 8), origin('center'), pos(width() / 2, (height() / 2) + 140)])
 
-    let selectedCharacter = 0
+    let selectedCharacter = 0;
 
     function drawCharacters() {
         characters.forEach((character, index) => {
-            const position = vec2((width() / 3) + index * 80, 100)
-            const spriteName = character
-            const isSelected = index === selectedCharacter
+            const position = vec2(width() / 3 + index * 80, 100);
+            const spriteName = character;
+            const isSelected = index === selectedCharacter;
             add([
                 sprite(spriteName),
                 pos(position),
                 scale(isSelected ? 1.5 : 1),
-                'character',
+                "character",
                 {
-                    characterName: character
-                }
-            ])
-        })
+                    characterName: character,
+                },
+            ]);
+        });
     }
 
     drawCharacters();
@@ -142,42 +148,51 @@ scene("characterSelect", () => {
 
 
 
-
-
 scene("game", ({ character, level, score }) => {
     layers(["bg", "obj", "ui"], "obj");
-
+    let bgMusic;
 
     let backgroundSprite;
     switch (level) {
         case 0:
-            backgroundSprite = "background1";
+            backgroundSprite = "background2";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound1", { loop: true, volume: 0.7 })
             break;
         case 1:
-            backgroundSprite = "background2";
+            backgroundSprite = "background3";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound2", { loop: true, volume: 0.7 })
             break;
         case 2:
-            backgroundSprite = "background3";
+            backgroundSprite = "background4";
+            if (bgMusic) bgMusic.stop();
+            bgMusic = play("sound3", { loop: true, volume: 0.7 })
             break;
         case 3:
-            backgroundSprite = "background3";
+            backgroundSprite = "background5";
+            if (bgMusic) bgMusic.stop();
             break;
         case 4:
-            backgroundSprite = "background3";
+            backgroundSprite = "background6";
+            if (bgMusic) bgMusic.stop();
             break;
         case 5:
-            backgroundSprite = "background3";
+            backgroundSprite = "background7";
+            if (bgMusic) bgMusic.stop();
             break;
         case 6:
-            backgroundSprite = "background3";
+            backgroundSprite = "background8";
+            if (bgMusic) bgMusic.stop();
             break;
         case 7:
-            backgroundSprite = "background3";
+            backgroundSprite = "background9";
+            if (bgMusic) bgMusic.stop();
             break;
 
 
         default:
-            backgroundSprite = "background1";
+            backgroundSprite = "background2";
     }
     add([
         sprite(backgroundSprite),
@@ -186,6 +201,29 @@ scene("game", ({ character, level, score }) => {
         scale(1.9, .495)
     ]);
 
+    
+
+
+
+
+
+
+
+
+
+    const spriteWidth = 400;
+    const levelWidth = 1750;
+
+    const numberOfRepeats = Math.ceil(levelWidth / spriteWidth);
+
+    for (let i = 0; i < numberOfRepeats; i++) {
+        add([
+            sprite(backgroundSprite),
+            layer("bg"),
+            pos(i * spriteWidth, 0),
+            scale(1.9, 0.495)
+        ]);
+    }
 
     // add([
     //     sprite("background"),
@@ -197,76 +235,75 @@ scene("game", ({ character, level, score }) => {
     const maps = [
         //Test level for new items
         [
-            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££',
-            '£                                                                                                         ',
-            '£                                                                                                         ',
-            '£                                                                                                         ',
-            '£           %=%    $$$$$                                                                                  ',
-            '£                > =====                                                                                  ',
-            '£                               -+             =*=                                                        ',
-            '£            =====           -+ ()                   ===              @@@=*=%=            =%%=            ',
-            '£       ======            -+ () ()      =%%=        ====                            -+           -+     y ',
-            '£    f             ^      () () ()           ^     =====                     ^  ^   ()           ()       ',
-            '£================================================================   ====================  ================',
-
+            "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££",
+            "£                                                                                                                               ",
+            "£                                                                                                                               ",
+            "£                                                                                                                               ",
+            "£           %=%    $$$$$                                                                                                        ",
+            "£                > =====                                                                                                        ",
+            "£                               -+             =*=                                                                              ",
+            "£            =====           -+ ()                   ===              @@@=*=%=            =%%=                                  ",
+            "£       ======            -+ () ()      =%%=        ====                            -+           -+                           y ",
+            "£    f             ^      () () ()           ^     =====                     ^  ^   ()           ()                             ",
+            "£================================================================   ====================  ======================================",
+            "£================================================================   ====================  ======================================",
         ],
         [
-            '=                                                                                                         ',
-            '=                                                                                                         ',
-            '=                   $$                                                                                    ',
-            '=                  $xx                                                                                    ',
-            '=                 $xxx                                                                                    ',
-            '=                 xxxx  =*=*=                                                                             ',
-            '=                xxxxx           =*=*=                                                                    ',
-            '=       =*=@=   xxxxxx                                        }                                           ',
-            '=              xxxxxxx ====      %%%        -+           =%%=                                             ',
-            '=             xxxxxxxx                      ()                               x                         -+ ',
-            '=      z   z xxxxxxxxx                      ()()  ^    ^                                              () ',
-            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££',
-            '££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££',
-
+            "=                                                                                                         ",
+            "=                                                                                                         ",
+            "=                   $$                                                                                    ",
+            "=                  $xx                                                                                    ",
+            "=                 $xxx                                                                                    ",
+            "=                 xxxx  =*=*=                                                                             ",
+            "=                xxxxx           =*=*=                                                                    ",
+            "=       =*=@=   xxxxxx                                        }                                           ",
+            "=              xxxxxxx ====      %%%        -+           =%%=                                             ",
+            "=             xxxxxxxx                      ()                               x                         -+ ",
+            "=      z   z xxxxxxxxx                      ()()  ^    ^                                              () ",
+            "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££",
+            "££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££    ££££££££££££££££££££££££££££££££££",
         ],
         [
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '    %   <=*=%=                        %=*=%=                                                       % ',
-            '                     w                                                            w                  ',
-            '   g                        -+                                    -+                          -+     ',
-            '             q              ()   e              rr       t     ^  ()                          ()     ',
-            '=================  ==========================  ======  ==================   =============== =========',
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "    %   <=*=%=                        %=*=%=                                                       % ",
+            "                     w                                                            w                  ",
+            "   g                        -+                                    -+                          -+     ",
+            "             q              ()   e              rr       t     ^  ()                          ()     ",
+            "=================  ==========================  ======  ==================   =============== =========",
         ],
         [
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '                                                                                                     ',
-            '       <=*=%=                        %=*=%=                                                        % ',
-            '    g                                                                                                ',
-            '                            -+                                     -+                         -+     ',
-            '            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ',
-            '=================  ==========================  ======  ==================   =============== =========',
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "                                                                                                     ",
+            "       <=*=%=                        %=*=%=                                                        % ",
+            "    g                                                                                                ",
+            "                            -+                                     -+                         -+     ",
+            "            ^        ^   ^  ()   ^                         ^    ^  ()                         ()     ",
+            "=================  ==========================  ======  ==================   =============== =========",
         ],
         [
-            '£                                                                                                      £',
-            '£                                                                                                      £',
-            '£                                                                                                      £',
-            '£                                                                                                      £',
-            '£                                                                                                      £',
-            '£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £',
-            '£                          x x x     =*=%=                                                             £',
-            '£                        x x x x  x                                                                  -+£',
-            '£            &     & z  x x x x x  x                      &   &            &  z       &           &  ()£',
-            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ',
+            "£                                                                                                      £",
+            "£                                                                                                      £",
+            "£                                                                                                      £",
+            "£                                                                                                      £",
+            "£                                                                                                      £",
+            "£  @@@@@@   =*=%=            x x                                     @@@=*=%=                          £",
+            "£                          x x x     =*=%=                                                             £",
+            "£                        x x x x  x                                                                  -+£",
+            "£            &     & z  x x x x x  x                      &   &            &  z       &           &  ()£",
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!  !!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!    !!!!!!!!!!! ",
         ],
         /* level by q 
-        /* level by q
-    problems: evil shrooms don't fall; evil shrooms should move back and forth
-    requires: mushroom to also increase jump force
-    requires: finish line to go to next lvl*/
+            /* level by q
+        problems: evil shrooms don't fall; evil shrooms should move back and forth
+        requires: mushroom to also increase jump force
+        requires: finish line to go to next lvl*/
         [
             "                                                                                                                    ",
             "                                                  *                           $$$$$$                                ",
@@ -331,18 +368,18 @@ scene("game", ({ character, level, score }) => {
         'u': [sprite('goldblock'), solid()],
     }
 
-    const gameLevel = addLevel(maps[level], levelCfg)
+    const gameLevel = addLevel(maps[level], levelCfg);
 
     const scoreLabel = add([
         pos(100, 6),
-        layer('ui'),
+        layer("ui"),
         {
             value: score,
         },
         text("Score: " + score),
-    ])
+    ]);
 
-    add([text('level ' + parseInt(level + 1)), pos(30, 6)])
+    add([text("level " + parseInt(level + 1)), pos(30, 6)]);
 
     // power-up functions
     function big() {
@@ -376,29 +413,29 @@ scene("game", ({ character, level, score }) => {
     }
 
     function star() {
-        let timer = 0
-        let isInvincible = false
+        let timer = 0;
+        let isInvincible = false;
         return {
             update() {
                 if (isInvincible) {
-                    CURRENT_MOVE_SPEED = MOVE_SPEED * 1.1
-                    timer -= dt()
+                    CURRENT_MOVE_SPEED = MOVE_SPEED * 1.1;
+                    timer -= dt();
                     if (timer <= 0) {
-                        this.noStar()
+                        this.noStar();
                     }
                 }
             },
             isInvincible() {
-                return isInvincible
+                return isInvincible;
             },
             noStar() {
-                CURRENT_MOVE_SPEED = MOVE_SPEED
-                timer = 0
-                isInvincible = false
+                CURRENT_MOVE_SPEED = MOVE_SPEED;
+                timer = 0;
+                isInvincible = false;
             },
             starUp(time) {
-                timer = time
-                isInvincible = true
+                timer = time;
+                isInvincible = true;
             },
         };
     }
@@ -466,78 +503,78 @@ scene("game", ({ character, level, score }) => {
     });
 
     player.on("headbump", (obj) => {
-        if (obj.is('coin-surprise')) {
-            gameLevel.spawn('$', obj.gridPos.sub(0, 1))
-            destroy(obj)
-            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        if (obj.is("coin-surprise")) {
+            gameLevel.spawn("$", obj.gridPos.sub(0, 1));
+            destroy(obj);
+            gameLevel.spawn("}", obj.gridPos.sub(0, 0));
         }
-        if (obj.is('mushroom-surprise')) {
-            gameLevel.spawn('#', obj.gridPos.sub(0, 1))
-            destroy(obj)
-            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        if (obj.is("mushroom-surprise")) {
+            gameLevel.spawn("#", obj.gridPos.sub(0, 1));
+            destroy(obj);
+            gameLevel.spawn("}", obj.gridPos.sub(0, 0));
         }
-        if (obj.is('star-surprise')) {
-            gameLevel.spawn('>', obj.gridPos.sub(0, 1))
-            destroy(obj)
-            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        if (obj.is("star-surprise")) {
+            gameLevel.spawn(">", obj.gridPos.sub(0, 1));
+            destroy(obj);
+            gameLevel.spawn("}", obj.gridPos.sub(0, 0));
         }
-        if (obj.is('fire-surprise')) {
-            gameLevel.spawn('f', obj.gridPos.sub(0, 1))
-            destroy(obj)
-            gameLevel.spawn('}', obj.gridPos.sub(0, 0))
+        if (obj.is("fire-surprise")) {
+            gameLevel.spawn("f", obj.gridPos.sub(0, 1));
+            destroy(obj);
+            gameLevel.spawn("}", obj.gridPos.sub(0, 0));
         }
-        if (obj.is('dangerous')) {
+        if (obj.is("dangerous")) {
             if (player.isBig()) {
-                destroy(obj)
-                player.smallify()
-                scoreLabel.value++
-                scoreLabel.text = "Score: " + scoreLabel.value
+                destroy(obj);
+                player.smallify();
+                scoreLabel.value++;
+                scoreLabel.text = "Score: " + scoreLabel.value;
             } else
-                go('lose', {
-                    score: scoreLabel.text
-                })
+                go("lose", {
+                    score: scoreLabel.text,
+                });
         }
-    })
+    });
 
     player.collides("mushroom", (m) => {
         destroy(m);
         player.biggify(6);
     });
 
-    player.collides('coin', (c) => {
-        destroy(c)
-        scoreLabel.value++
-        scoreLabel.text = "Score: " + scoreLabel.value
-    })
+    player.collides("coin", (c) => {
+        destroy(c);
+        scoreLabel.value++;
+        scoreLabel.text = "Score: " + scoreLabel.value;
+    });
 
     player.collides("star", (s) => {
         destroy(s);
         player.starUp(6);
     });
 
-    player.collides('fireflower', (g) => {
-        destroy(g)
-        player.fireUp(6)
-    })
+    player.collides("fireflower", (g) => {
+        destroy(g);
+        player.fireUp(6);
+    });
 
     action("dangerous", (d) => {
         d.move(-ENEMY_SPEED, 0);
     });
 
     player.action(() => {
-        camPos(player.pos)
+        camPos(player.pos);
         if (player.pos.y >= FALL_DEATH) {
-            go('lose', {
-                score: scoreLabel.text
-            })
+            go("lose", {
+                score: scoreLabel.text,
+            });
         }
-    })
+    });
 
     player.collides("pipe", () => {
         keyPress("down", () => {
-            player.smallify()
-            player.noFire()
-            player.noStar()
+            player.smallify();
+            player.noFire();
+            player.noStar();
             go("game", {
                 character: character,
                 level: (level + 1) % maps.length,
@@ -546,20 +583,20 @@ scene("game", ({ character, level, score }) => {
         });
     });
 
-    player.collides('dangerous', (d) => {
+    player.collides("dangerous", (d) => {
         if (isJumping || player.isInvincible()) {
-            destroy(d)
-            scoreLabel.value++
-            scoreLabel.text = "Score: " + scoreLabel.value
+            destroy(d);
+            scoreLabel.value++;
+            scoreLabel.text = "Score: " + scoreLabel.value;
         } else if (player.isBig()) {
-            destroy(d)
-            player.smallify()
-            scoreLabel.value++
-            scoreLabel.text = "Score: " + scoreLabel.value
+            destroy(d);
+            player.smallify();
+            scoreLabel.value++;
+            scoreLabel.text = "Score: " + scoreLabel.value;
         } else {
-            go('lose', {
-                score: scoreLabel.text
-            })
+            go("lose", {
+                score: scoreLabel.text,
+            });
         }
     });
 
@@ -596,16 +633,19 @@ scene("game", ({ character, level, score }) => {
             player.jump(CURRENT_JUMP_FORCE);
         }
     });
-
 });
 
-scene('lose', ({ score }) => {
-    add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)])
-    add([text("Press 'space' to restart the game!", 16), origin('center'), pos(width() / 2, (height() / 2) + 40)])
-    keyPress('space', () => {
-        go("characterSelect")
-    })
-})
+scene("lose", ({ score }) => {
+    add([text(score, 32), origin("center"), pos(width() / 2, height() / 2)]);
+    add([
+        text("Press 'space' to restart the game!", 16),
+        origin("center"),
+        pos(width() / 2, height() / 2 + 40),
+    ]);
+    keyPress("space", () => {
+        go("characterSelect");
+    });
+});
 
-start("characterSelect")
+start("characterSelect");
 // start("game", { level: 0, score: 0 })
