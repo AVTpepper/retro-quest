@@ -14,6 +14,7 @@ loadSound("sound2", "assets/arcade-sounds/sound2.mp3");
 loadSound("sound3", "assets/arcade-sounds/sound3.mp3");
 
 // Sound Control
+let isMuted = false;
 let bgMusic = null;
 const muteIcon = document.querySelector('.mute-icon');
 const unmuteIcon = document.querySelector('.unmute-icon');
@@ -34,6 +35,7 @@ function updateMuteIcon() {
 muteIcon.addEventListener('click', () => {
   if (bgMusic) {
     bgMusic.volume(0.3);
+    isMuted = false;
     updateMuteIcon();
   }
 });
@@ -42,6 +44,7 @@ muteIcon.addEventListener('click', () => {
 unmuteIcon.addEventListener('click', () => {
   if (bgMusic) {
     bgMusic.volume(0);
+    isMuted = true;
     updateMuteIcon();
   }
 });
@@ -207,73 +210,75 @@ scene("game", ({ character, level, score }) => {
   layers(["bg", "obj", "ui"], "obj");
 
   let backgroundSprite;
+  let currentVolume = isMuted ? 0 : 0.3;
   switch (level) {
     case 0:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound1", { loop: true, volume: 0.3 });
-      backgroundSprite = "background1";
+      bgMusic = play("sound1", { loop: true, volume: currentVolume });
+      backgroundSprite = "background2";
       break;
     case 1:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound2", { loop: true, volume: 0.3 });
-      backgroundSprite = "background2";
+      bgMusic = play("sound2", { loop: true, volume: currentVolume });
+      backgroundSprite = "background3";
       break;
     case 2:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound3", { loop: true, volume: 0.3 });
-      backgroundSprite = "background3";
+      bgMusic = play("sound3", { loop: true, volume: currentVolume });
+      backgroundSprite = "background4";
       break;
     case 3:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound1", { loop: true, volume: 0.3 });
-      backgroundSprite = "background4";
+      bgMusic = play("sound1", { loop: true, volume: currentVolume });
+      backgroundSprite = "background6";
       break;
     case 4:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound2", { loop: true, volume: 0.3 });
-      backgroundSprite = "background6";
+      bgMusic = play("sound2", { loop: true, volume: currentVolume });
+      backgroundSprite = "background7";
       break;
     case 5:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound3", { loop: true, volume: 0.3 });
-      backgroundSprite = "background7";
+      bgMusic = play("sound3", { loop: true, volume: currentVolume });
+      backgroundSprite = "background8";
       break;
     case 6:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound1", { loop: true, volume: 0.3 });
-      backgroundSprite = "background8";
+      bgMusic = play("sound1", { loop: true, volume: currentVolume });
+      backgroundSprite = "background9";
       break;
     case 7:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound2", { loop: true, volume: 0.3 });
-      backgroundSprite = "background3";
+      bgMusic = play("sound2", { loop: true, volume: currentVolume });
+      backgroundSprite = "background10";
       break;
     default:
       if (bgMusic) {
         bgMusic.stop();
       }
-      bgMusic = play("sound3", { loop: true, volume: 0.3 });
-      backgroundSprite = "background3";
+      bgMusic = play("sound3", { loop: true, volume: currentVolume });
+      backgroundSprite = "background11";
       break;;
   }
   add([sprite(backgroundSprite), layer("bg"), pos(0, 0), scale(1.9, 0.495)]);
 
+  
     const spriteWidth = 400;
     const levelWidth = 1750;
 
