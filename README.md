@@ -2,7 +2,7 @@
 
 *Mario Retro Quest*  is an engaging platformer game inspired by classic Mario adventure games. You'll take control of the characters from Mario world, collect coins, change sizes by interacting with items, and defeat enemies by jumping on them.
 
-![Mario Retro Quest Banner](assets/images/Screenshot-main.png)
+![Mario Retro Quest Banner](assets/images/main-screenshot.png)
 <hr>
 
 ## **TABLE OF CONTENTS**
@@ -127,6 +127,17 @@ The creation of the game involved the use of the following technologies:
 
 ## Testing
 
+## **HTML Validation**
+
+* No errors detected when run through the official [W3C HTML Validation Service](https://validator.w3.org/)
+
+##### Lighthouse
+
+Results from Lighthouse testing:
+
+* Desktop
+![Responsice Mockup](assets/images/lighthouse-desktop.png)
+
 ### Devices Tested
 - Apple MacBook Pro 2015 | 15.4"
 - Acer Aspire 7750Z | 17.3"
@@ -170,14 +181,8 @@ Pressing the right, left, up, and down arrow keys moves the character in the spe
 1. When the main character collided with a Piranha Plant, the character did not die as expected.
    - **Resolution:** This bug was fixed by adding an action with the appropriate tag and description inside the function that determines the Piranha Plant's behavior.
 
-2. Sound icons were unresponsive when clicked.
-   - **Resolution:** The issue with the sound icons not working when clicked was addressed by (developer's comment).
-
 3. The background image was shorter than the level length, causing a visible gap.
    - **Resolution:** The background length issue was fixed by implementing a looping function to repeat the background image seamlessly throughout the level.
-
-4. Music from the previous level overlaped with the music in the next level.
-   - **Resolution:** The problem of overlapping music between levels was resolved by (developer's comment).
 
 <hr>
 
